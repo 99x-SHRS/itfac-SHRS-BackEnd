@@ -83,7 +83,14 @@ const getMessagesByRecieverIdAndDate = async (req, res) => {
 
 }
 
+const markAsRead= async (req, res)=>{
+    let id= req.body.id
+    console.log(id)
+    await Message.update({mardRead:true}, { where: { messageId: id }})
+    .then(message=>res.status(200).send(message))
+    .catch(err=>console.log(err))
 
+}
 
 
 
@@ -93,5 +100,6 @@ module.exports={
     getMessagesBySenderId,
     getMessagesByRecieverId,
     getMessagesBySenderIdAndDate,
-    getMessagesByRecieverIdAndDate
+    getMessagesByRecieverIdAndDate,
+    markAsRead
 }

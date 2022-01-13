@@ -8,5 +8,6 @@ router.post('/getMessagesBySenderId',userController.getMessagesBySenderId)
 router.post('/getMessagesByRecieverId',userController.getMessagesByRecieverId)
 router.post('/getMessagesBySenderIdAndDate',userController.getMessagesBySenderIdAndDate)
 router.post('/getMessagesByRecieverIdAndDate',userController.getMessagesByRecieverIdAndDate)
+router.put('/markAsRead',userController.markAsRead)
 
 module.exports=router
