@@ -19,6 +19,7 @@ module.exports=(sequelize,DataTypes)=>{
         },
         to:{
             type: DataTypes.INTEGER,
+            references: { model: 'users', key: 'uId' },
             
         },
         mardRead:{

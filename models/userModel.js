@@ -15,13 +15,17 @@ module.exports=(sequelize,DataTypes)=>{
             type: DataTypes.STRING
 
         },
-        fName:{
+        firstName:{
             type: DataTypes.STRING
             
         },
-        lName:{
+        lastName:{
             type: DataTypes.STRING,
             allowNull: false
+
+        },
+        password:{
+            type: DataTypes.STRING,
 
         },
         province:{

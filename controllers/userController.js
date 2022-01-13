@@ -8,8 +8,8 @@ const addUser= async(req,res)=>{
     let info={
         email:req.body.email,
         contactNo:req.body.contactNo,
-        fName:req.body.fName,
-        lName:req.body.lName,
+        firstName:req.body.fName,
+        lastName:req.body.lName,
         province:req.body.province,
         district:req.body.district,
         street1:req.body.street1,
@@ -48,7 +48,7 @@ const updateUserById = async (req, res) => {
     let id = req.params.id
     console.log(req.body)
     const user = await User.update(req.body, { where: { uId: id }})
-    res.status(200).send("Successfully updated")
+    res.status(200).send(user)
    
 }
 
@@ -56,10 +56,16 @@ const updateUserById = async (req, res) => {
 const deleteUserById = async (req, res) => {
 
     let id = req.params.id
-    await User.destroy({ where: { uId: id }} )
-    res.status(200).send('User is deleted !')
+    const status =await User.destroy({ where: { uId: id }} )
+    if(status!=0){
+        res.status(200).send('Success')
+    }else{
+        res.status(200).send('Failed')
+    }
+    
 
 }
+
 module.exports={
     addUser,
     getAllUser,

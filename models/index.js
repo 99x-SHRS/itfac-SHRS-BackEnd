@@ -34,6 +34,10 @@ db.sequelize= sequelize
 db.users= require('./userModel.js')(sequelize,DataTypes)
 db.messages= require('./messageModel.js')(sequelize,DataTypes)
 
+// one-one relationship betweeen user and message
+// db.users.hasOne(db.messages)
+// db.messages.belongsTo(db.users)
+
 db.sequelize.sync({force:false})
 .then(()=>{
     console.log('Yes,re-sync ...')
