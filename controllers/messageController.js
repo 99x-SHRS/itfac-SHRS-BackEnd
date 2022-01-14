@@ -18,7 +18,7 @@ const sendMessage= async(req,res)=>{
         res.status(200).send(message)
         console.log(message)
     }catch(e){
-        res.send("Error occurerd.!")
+        res.send("Error")
         console.log("Error")
     }
     

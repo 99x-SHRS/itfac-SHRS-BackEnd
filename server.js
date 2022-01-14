@@ -17,10 +17,16 @@ app.use(express.urlencoded({extended:true}));
 
 const userRouter= require('./routes/userRouter.js')
 const messageRouter= require('./routes/messageRouter.js')
+const hotelRouter= require('./routes/hotelRouter.js')
+const requestRouter= require('./routes/requestRouter.js')
+const refferalRouter= require('./routes/requestRouter.js')
 
 
 app.use('/api/users',userRouter)
 app.use('/api/message',messageRouter)
+app.use('/api/hotel',hotelRouter)
+app.use('/api/request',requestRouter)
+app.use('/api/refferal',requestRouter)
 
 //test api
 app.get('/',(req,res)=>{

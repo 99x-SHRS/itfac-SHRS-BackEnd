@@ -46,7 +46,6 @@ const getUserById = async (req, res) => {
 const updateUserById = async (req, res) => {
 
     let id = req.params.id
-    console.log(req.body)
     const user = await User.update(req.body, { where: { uId: id }})
     res.status(200).send(user)
    
@@ -60,7 +59,7 @@ const deleteUserById = async (req, res) => {
     if(status!=0){
         res.status(200).send('Success')
     }else{
-        res.status(200).send('Failed')
+        res.status(200).send('Error')
     }
     
 
