@@ -51,15 +51,20 @@ const updateHotelById = async (req, res) => {
 const deleteHotelById = async (req, res) => {
 
     let id = req.params.id
-    const status =await Hotel.destroy({ where: { hotelId: id }} )
-    if(status!=0){
-        res.status(200).send('Success')
-    }else{
-        res.status(200).send('Error')
-    }
+    await Hotel.destroy({ where: { hotelId: id }} )
+    .then((status)=>{
+        if(status!=0){
+            res.status(200).send('Success')
+        }else{
+            res.status(200).send('Error')
+        }
+    })
+    .catch((err)=>{
+        res.status(500).send(err)
+    })
     
-
 }
+
 module.exports={
     registerHotel,
     getAllHotels,

@@ -36,9 +36,13 @@ db.messages= require('./messageModel.js')(sequelize,DataTypes)
 db.hotels= require('./hotelModel.js')(sequelize,DataTypes)
 db.requests= require('./requestModel.js')(sequelize,DataTypes)
 db.refferals= require('./refferalModel.js')(sequelize,DataTypes)
-
+db.coupons= require('./couponModel.js')(sequelize,DataTypes)
+db.rooms= require('./roomModel.js')(sequelize,DataTypes)
+db.roomtypes= require('./roomtypeModel.js')(sequelize,DataTypes)
+db.bookings= require('./bookingModel.js')(sequelize,DataTypes)
 
 db.sequelize.sync({force:false})
+// db.sequelize.sync({force:true})
 .then(()=>{
     console.log('Yes,re-sync ...')
 })
