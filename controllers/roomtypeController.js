@@ -12,9 +12,12 @@ const createRoomtype= async(req,res)=>{
         area:req.body.area
 
     }
-    const roomType= await Roomtypes.create(info)
-    res.status(200).send(roomType)
-    console.log(roomType)
+    await Roomtypes.create(info)
+    .then(roomType=>res.status(200).send(roomType))
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
 
 }
 

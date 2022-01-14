@@ -40,9 +40,10 @@ db.coupons= require('./couponModel.js')(sequelize,DataTypes)
 db.rooms= require('./roomModel.js')(sequelize,DataTypes)
 db.roomtypes= require('./roomtypeModel.js')(sequelize,DataTypes)
 db.bookings= require('./bookingModel.js')(sequelize,DataTypes)
+db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
 
 db.sequelize.sync({force:false})
-// db.sequelize.sync({force:true})
+//db.sequelize.sync({force:true})
 .then(()=>{
     console.log('Yes,re-sync ...')
 })

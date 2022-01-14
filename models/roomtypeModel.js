@@ -1,5 +1,5 @@
 module.exports=(sequelize,DataTypes)=>{
-    const Roomtypes= sequelize.define("roomtypes",{
+    const Roomtypes= sequelize.define("roomtype",{
         
         roomTypeId:{
             type: DataTypes.INTEGER,

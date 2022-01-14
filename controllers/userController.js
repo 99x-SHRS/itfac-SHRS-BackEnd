@@ -17,9 +17,12 @@ const addUser= async(req,res)=>{
         image:req.body.image,
 
     }
-    const user= await User.create(info)
-    res.status(200).send(user)
-    console.log(user)
+    await User.create(info)
+    .then(user=>res.status(200).send(user))
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
 
 }
 
