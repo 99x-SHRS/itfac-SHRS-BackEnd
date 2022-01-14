@@ -7,20 +7,36 @@ const Refferal= db.refferals
 const createRefferal= async(req,res)=>{
 
     let info={
-        notification:req.body.notification,
-        type:req.body.type,
-        from:req.body.from,
-        to:req.body.to,
-        mardRead:req.body.mardRead,
+        token:req.body.token,
+        userId:req.body.userId    
     }
-    try{
-        const message= await Message.create(info)
-        res.status(200).send(message)
-        console.log(message)
-    }catch(e){
-        res.send("Error")
-        console.log("Error")
-    }
-    
+    await Refferal.create(info)
+    .then(refferal=>res.status(200).send(refferal))
+    .catch(err=>res.status(500).send(err))    
 
+}
+
+const refferalValidate= async(req,res)=>{
+
+    let token= req.query.token
+    console.log(token)
+    await Refferal.findOne({ where: { token: token }})
+    .then((data)=>{
+            console.log(data)
+            if(data!=null){
+                res.status(200).send("Valid")
+            }else{
+                res.status(200).send("Invalid")
+            }
+            
+    })
+    .catch((err)=>{
+        res.status(200).send("Error")
+    })
+
+
+}
+module.exports={
+    createRefferal,
+    refferalValidate
 }

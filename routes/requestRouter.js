@@ -8,4 +8,5 @@ router.get('/getAllRequest',requestController.getAllRequest)
 router.put('/acceptRequest',requestController.acceptRequest)
 router.post('/getRequestByRequestId',requestController.getRequestByRequestId) 
 router.post('/getRequestByhotelAdminId',requestController.getRequestByhotelAdminId)
+
 module.exports=router
