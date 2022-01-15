@@ -41,6 +41,12 @@ db.rooms= require('./roomModel.js')(sequelize,DataTypes)
 db.roomtypes= require('./roomtypeModel.js')(sequelize,DataTypes)
 db.bookings= require('./bookingModel.js')(sequelize,DataTypes)
 db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
+db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
+db.paymenttypes= require('./paymenttypeModel.js')(sequelize,DataTypes)
+db.reviews= require('./reviewModel.js')(sequelize,DataTypes)
+db.bookinginfo= require('./bookingInfoModel.js')(sequelize,DataTypes)
+
+
 
 db.sequelize.sync({force:false})
 //db.sequelize.sync({force:true})
