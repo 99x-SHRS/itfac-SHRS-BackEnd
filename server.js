@@ -25,6 +25,11 @@ const roomRouter= require('./routes/roomRouter.js')
 const roomtypeRouter= require('./routes/roomtypeRouter.js')
 const bookingRouter= require('./routes/bookingRouter.js')
 const souvenirRouter= require('./routes/souvenirRouter.js')
+const paymenttypeRouter= require('./routes/paymenttypeRouter.js')
+const reviewRouter= require('./routes/reviewRouter.js')
+const vasRouter= require('./routes/vasRouter.js')
+
+
 
 
 app.use('/api/users',userRouter)
@@ -37,6 +42,10 @@ app.use('/api/room',roomRouter)
 app.use('/api/roomtype',roomtypeRouter)
 app.use('/api/booking',bookingRouter)
 app.use('/api/souvenir',souvenirRouter)
+app.use('/api/paymenttype',paymenttypeRouter)
+app.use('/api/review',reviewRouter)
+app.use('/api/vas',vasRouter)
+
 
 //test api
 app.get('/',(req,res)=>{

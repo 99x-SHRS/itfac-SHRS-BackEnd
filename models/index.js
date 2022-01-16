@@ -45,7 +45,10 @@ db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
 db.paymenttypes= require('./paymenttypeModel.js')(sequelize,DataTypes)
 db.reviews= require('./reviewModel.js')(sequelize,DataTypes)
 db.bookinginfo= require('./bookingInfoModel.js')(sequelize,DataTypes)
+db.vas= require('./vasModel.js')(sequelize,DataTypes)
 
+db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
+db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS' })
 
 
 db.sequelize.sync({force:false})
