@@ -1,6 +1,7 @@
 const db= require('../models')
 const Booking= db.bookings
-
+const VAS= db.vas
+const Hotel= db.hotels
 
 //new booking
 const booking = async(req,res) =>{
@@ -14,9 +15,14 @@ const booking = async(req,res) =>{
         rentCar:req.body.rentCar,
         customerId:req.body.customerId,
     }
+    let vasId= req.body.vasId
+    let vasinfo = await VAS.findOne({ where: { vasId: vasId }})
 
     await Booking.create(info)
-    .then(booking=>res.status(200).send(booking))
+    .then(booking=>{
+        booking.addVas(vasinfo)
+        res.status(200).send(booking)
+    })
     .catch((err)=>{
         console.log(err)
         res.status(500).send(err)
@@ -27,7 +33,11 @@ const booking = async(req,res) =>{
 // Get all bookings
 const getAllBookings = async (req, res) => {
 
-    await Booking.findAll({})
+    await Booking.findAll({
+        include:[{
+            model:VAS
+        }]
+    })
     .then(bookings=>res.status(200).send(bookings))
     .catch((err)=>{
         console.log(err)
@@ -36,11 +46,18 @@ const getAllBookings = async (req, res) => {
 
 }
 
-//Get bookin by ID
+//Get booking by ID
 const getBookingById= async (req, res) => {
 
     let id = req.body.id
-    await Booking.findOne({ where: { bookingId: id }})
+    await Booking.findOne(
+        { 
+            where: { bookingId: id },
+            include:[{
+                model:VAS,               
+                
+            }]
+        })
     .then(booking=>res.status(200).send(booking))
     .catch((err)=>{
         console.log(err)
@@ -83,6 +100,38 @@ const deleteBookingByID = async (req, res) => {
 
 }
 
+//add vas to bookings
+
+const addVASToBooking = async(req,res) =>{
+
+    let info={
+        checkInDate:req.body.checkInDate,
+        checkOutDate:req.body.checkOutDate,
+        specialRequest:req.body.specialRequest,
+        arrivalTime:req.body.arrivalTime,
+        guestName:req.body.guestName,
+        rentCar:req.body.rentCar,
+        customerId:req.body.customerId,
+    }
+    let vasId= req.body.vasId
+    let vasinfo = await VAS.findOne({ where: { vasId: vasId }})
+
+    let bookingId= req.body.bookingId
+    let bookinginfo = await Booking.findOne({ where: { bookingId: bookingId }})
+
+// console.log(vasinfo)
+// console.log(bookinginfo)
+    await bookinginfo.addVas(vasinfo)
+    .then((data)=>{  
+        
+        res.status(200).send("success")
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
+
+}
 
 
 
@@ -91,6 +140,7 @@ module.exports={
     getAllBookings,
     getBookingById,
     updateBookingById,
-    deleteBookingByID
+    deleteBookingByID,
+    addVASToBooking
 
 }
