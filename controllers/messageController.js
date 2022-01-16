@@ -16,7 +16,6 @@ const sendMessage= async(req,res)=>{
     try{
         const message= await Message.create(info)
         res.status(200).send(message)
-        console.log(message)
     }catch(e){
         res.send("Error")
         console.log("Error")
@@ -37,7 +36,6 @@ const getAllMessage = async (req, res) => {
 const getMessagesBySenderId = async (req, res) => {
 
     let id = req.body.id
-    console.log(id)
     let user = await Message.findAll({ where: { from: id }})
     res.status(200).send(user)
 
@@ -47,7 +45,6 @@ const getMessagesBySenderId = async (req, res) => {
 const getMessagesByRecieverId = async (req, res) => {
 
     let id = req.body.id
-    console.log(id)
     let user = await Message.findAll({ where: { to: id }})
     res.status(200).send(user)
 

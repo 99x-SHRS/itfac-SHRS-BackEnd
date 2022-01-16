@@ -40,7 +40,6 @@ const getAllCoupons = async (req, res) => {
 const getCouponByCouponId = async (req, res) => {
 
     let id = req.body.couponId
-    console.log(id)
     let coupon = await Coupon.findAll({ where: { couponId: id }})
     res.status(200).send(coupon)
 
@@ -59,7 +58,6 @@ const validateCoupon = async (req, res) => {
 const deleteCouponById = async (req, res) => {
 
     let id = req.params.id
-    console.log(id)
     const status =await Coupon.destroy({ where: { couponId: id }} )
     if(status!=0){
         res.status(200).send('Success')

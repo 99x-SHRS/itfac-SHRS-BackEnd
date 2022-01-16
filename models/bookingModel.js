@@ -26,7 +26,11 @@ module.exports=(sequelize,DataTypes)=>{
         },
         customerId:{
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'uId' },
+            references: { model: 'users', key: 'uId' },            
+        },
+        roomId:{
+            type: DataTypes.INTEGER,
+            references: { model: 'rooms', key: 'roomId' },
         }
 
 

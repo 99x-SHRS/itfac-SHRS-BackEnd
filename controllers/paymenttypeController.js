@@ -42,7 +42,6 @@ const updatPaymentTypeById = async (req, res) => {
     let id = req.params.id
     await Paymenttype.update(req.body, { where: { paymenttypeId: id }})
     .then((data)=>{
-        console.log(data)
         res.status(200).send(data)
     })
     .catch((err)=>{
@@ -58,7 +57,6 @@ const deletePaymenTypeById = async (req, res) => {
     let id = req.params.id
     await Paymenttype.destroy({ where: { paymenttypeId: id }} )
     .then((data)=>{
-        console.log(data)
         if(data!=0){
             res.status(200).send('Success')
         }else{

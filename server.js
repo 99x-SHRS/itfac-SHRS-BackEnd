@@ -14,7 +14,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 
 //routers
-
 const userRouter= require('./routes/userRouter.js')
 const messageRouter= require('./routes/messageRouter.js')
 const hotelRouter= require('./routes/hotelRouter.js')
@@ -28,6 +27,7 @@ const souvenirRouter= require('./routes/souvenirRouter.js')
 const paymenttypeRouter= require('./routes/paymenttypeRouter.js')
 const reviewRouter= require('./routes/reviewRouter.js')
 const vasRouter= require('./routes/vasRouter.js')
+const paymentRouter= require('./routes/paymentRouter.js')
 
 
 
@@ -45,6 +45,7 @@ app.use('/api/souvenir',souvenirRouter)
 app.use('/api/paymenttype',paymenttypeRouter)
 app.use('/api/review',reviewRouter)
 app.use('/api/vas',vasRouter)
+app.use('/api/payment',paymentRouter)
 
 
 //test api

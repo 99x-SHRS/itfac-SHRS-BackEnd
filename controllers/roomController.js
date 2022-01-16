@@ -10,8 +10,6 @@ const createRoom = async(req,res) =>{
         roomTypeId:req.body.roomTypeId
     }
 
-console.log(info)
-
 const room=  await Room.create(info)
     .then(room=>res.status(200).send(room))
     .catch((err)=>{
