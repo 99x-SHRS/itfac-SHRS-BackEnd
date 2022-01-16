@@ -13,6 +13,10 @@ module.exports=(sequelize,DataTypes)=>{
         paymentOption:{
             type: DataTypes.JSON
         },
+        couponId:{
+            type: DataTypes.INTEGER,
+            references: { model: 'coupons', key: 'couponId' },
+        }
        
     })
     return PaymentType

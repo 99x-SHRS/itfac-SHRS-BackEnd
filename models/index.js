@@ -47,8 +47,14 @@ db.reviews= require('./reviewModel.js')(sequelize,DataTypes)
 db.bookinginfo= require('./bookingInfoModel.js')(sequelize,DataTypes)
 db.vas= require('./vasModel.js')(sequelize,DataTypes)
 
+//many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
 db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS' })
+
+db.bookings.belongsToMany(db.vas, { through: 'Booking_VAS' })
+db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' })
+
+
 
 
 db.sequelize.sync({force:false})

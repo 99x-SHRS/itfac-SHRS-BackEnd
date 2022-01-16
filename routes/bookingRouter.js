@@ -8,4 +8,7 @@ router.post('/getBookingById',bookingController.getBookingById)
 router.put('/updateBookingById/:id',bookingController.updateBookingById)
 router.delete('/deleteBookingByID/:id',bookingController.deleteBookingByID)
 
+
+router.post('/addVASToBooking',bookingController.addVASToBooking)
+
 module.exports=router
