@@ -6,7 +6,8 @@ const createRoom = async(req,res) =>{
     let info={
         roomNo:req.body.roomNo,
         description:req.body.description,      
-        hotelId:req.body.hotelId
+        hotelId:req.body.hotelId,
+        roomTypeId:req.body.roomTypeId
     }
 
 console.log(info)
@@ -51,6 +52,36 @@ const getRoomById = async (req, res) => {
     })
 
 }
+//Get room by hotel ID
+const getRoomByHotelId = async (req, res) => {
+
+    let id = req.body.id
+    console.log(id)
+    await Room.findAll({ where: { hotelId: id }})
+    .then((data)=>{
+        console.log(data)
+        res.status(200).send(data)
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(200).send(err)
+    })
+}
+//Get room by hotel ID and room type
+const getRoomsByHotelIdAndRoomType = async (req, res) => {
+
+    let hotelId = req.body.hotelId
+    let roomTypeId = req.body.roomTypeId
+    await Room.findAll({ where: { hotelId: hotelId ,roomTypeId:roomTypeId}})
+    .then((data)=>{
+        console.log(data)
+        res.status(200).send(data)
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(200).send(err)
+    })
+}
 //  update room by ID
 const updateRoomById = async (req, res) => {
 
@@ -93,6 +124,8 @@ module.exports={
     getAllRooms,
     getRoomById,
     updateRoomById,
-    deleteRoomById
+    deleteRoomById,
+    getRoomByHotelId,
+    getRoomsByHotelIdAndRoomType
 
 }

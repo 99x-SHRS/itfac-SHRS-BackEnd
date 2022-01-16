@@ -19,6 +19,10 @@ module.exports=(sequelize,DataTypes)=>{
         hotelId:{
             type: DataTypes.INTEGER,
             references: { model: 'hotels', key: 'hotelId' },
+        },
+        roomTypeId:{
+            type: DataTypes.INTEGER,
+            references: { model: 'roomtypes', key: 'roomTypeId' },
         }
     })
     return Room

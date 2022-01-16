@@ -44,8 +44,8 @@ db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
 db.souveniries= require('./souvenirModel.js')(sequelize,DataTypes)
 db.paymenttypes= require('./paymenttypeModel.js')(sequelize,DataTypes)
 db.reviews= require('./reviewModel.js')(sequelize,DataTypes)
-db.bookinginfo= require('./bookingInfoModel.js')(sequelize,DataTypes)
 db.vas= require('./vasModel.js')(sequelize,DataTypes)
+db.roominfo= require('./roominfoModel.js')(sequelize,DataTypes)
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
@@ -54,11 +54,13 @@ db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS' })
 db.bookings.belongsToMany(db.vas, { through: 'Booking_VAS' })
 db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' })
 
-
+db.roominfo.belongsTo(db.rooms,{as:'Room',foriegnKey:'roomId'})
+db.roominfo.belongsTo(db.hotels,{as:'Hotel',foriegnKey:'hotelId'})
+db.roominfo.belongsTo(db.roomtypes,{as:'Roomtypes',foriegnKey:'roomTypeId'})
 
 
 db.sequelize.sync({force:false})
-//db.sequelize.sync({force:true})
+//.db.sequelize.sync({force:true})
 .then(()=>{
     console.log('Yes,re-sync ...')
 })
