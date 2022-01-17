@@ -7,10 +7,7 @@ router.post('/getAllPayments',paymentController.getAllPayments)
 router.post('/getAllPaymentsBycustomerId',paymentController.getAllPaymentsBycustomerId)
 router.post('/getAllPaymentsBypaymentId',paymentController.getAllPaymentsBypaymentId)
 router.post('/getAllPaymentsBybookingId',paymentController.getAllPaymentsBybookingId)
-
-// router.post('/sendMessage',paymentController.sendMessage)
-
-
+router.post('/paymentStatusByBookingId',paymentController.paymentStatusByBookingId)
 
 
 module.exports=router

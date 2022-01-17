@@ -1,5 +1,7 @@
 const db= require('../models')
 const Paymenttype= db.paymenttypes
+
+
 //add new payment type
 const addPaymentType= async(req,res)=>{
 
@@ -10,7 +12,9 @@ const addPaymentType= async(req,res)=>{
        
     }
     await Paymenttype.create(info)
-    .then(paymenttype=>res.status(200).send(paymenttype))
+    .then(paymenttype=>{
+        res.status(200).send(paymenttype)
+    })
     .catch((err)=>{
         console.log(err)
         res.status(500).send(err)

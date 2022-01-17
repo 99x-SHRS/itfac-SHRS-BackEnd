@@ -1,15 +1,23 @@
 const db= require('../models')
+const bcrpt = require('bcrypt')
 
 const User= db.users
 
 // Add user
 const addUser= async(req,res)=>{
 
+    //bcrtpy password
+
+    const salt= await bcrpt.genSalt()
+    const hashedPassword = await bcrpt.hash(req.body.password,salt)
+
+
     let info={
         email:req.body.email,
         contactNo:req.body.contactNo,
         firstName:req.body.fName,
         lastName:req.body.lName,
+        password:hashedPassword,
         province:req.body.province,
         district:req.body.district,
         street1:req.body.street1,
@@ -23,6 +31,25 @@ const addUser= async(req,res)=>{
         console.log(err)
         res.status(500).send(err)
     })
+
+}
+
+const login= async (req,res)=>{
+
+    let email =req.body.email
+    let password =req.body.password
+    let user = await User.findOne({ where: { email: email }})
+
+    if (user==null) {
+        res.status(200).send("Cannot find user")
+    }else{
+        if (await bcrpt.compare(password,user.password)) {
+            res.status(200).send("Success")
+        }else{
+            res.status(200).send("Failed")
+        }
+
+    }
 
 }
 
@@ -70,6 +97,7 @@ const deleteUserById = async (req, res) => {
 
 module.exports={
     addUser,
+    login,
     getAllUser,
     getUserById,
     updateUserById,

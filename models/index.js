@@ -47,6 +47,8 @@ db.reviews= require('./reviewModel.js')(sequelize,DataTypes)
 db.vas= require('./vasModel.js')(sequelize,DataTypes)
 db.roominfo= require('./roominfoModel.js')(sequelize,DataTypes)
 db.payments= require('./paymentModel.js')(sequelize,DataTypes)
+db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
+db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
