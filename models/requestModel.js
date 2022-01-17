@@ -19,9 +19,10 @@ module.exports=(sequelize,DataTypes)=>{
             type: DataTypes.DATE,
             allowNull:true
         },
-        hotelAdminId:{
+        userId:{
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'uId' },
+            onDelete: 'CASCADE',
         }
         
     })

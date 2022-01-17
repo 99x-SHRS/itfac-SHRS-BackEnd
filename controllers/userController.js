@@ -2,6 +2,7 @@ const db= require('../models')
 const bcrpt = require('bcrypt')
 
 const User= db.users
+const Role= db.roles
 
 // Add user
 const addUser= async(req,res)=>{
@@ -25,8 +26,21 @@ const addUser= async(req,res)=>{
         image:req.body.image,
 
     }
-    await User.create(info)
-    .then(user=>res.status(200).send(user))
+    let roleInfo={
+        admin:0,
+        hotelAdmin:0,
+        customer:1,
+
+    }
+   await User.create(info)
+   .then((user)=>{
+       user.createRole(roleInfo)
+       .then((data)=>{
+        res.status(500).send(user)
+       })
+       
+       
+   })
     .catch((err)=>{
         console.log(err)
         res.status(500).send(err)
@@ -56,8 +70,13 @@ const login= async (req,res)=>{
 // Get all users
 const getAllUser = async (req, res) => {
 
-    let users = await User.findAll({})
+    let users = await User.findAll({
+        include:[{
+            model:Role
+        }]
+    })
     res.status(200).send(users)
+    
 
 }
 
@@ -65,8 +84,15 @@ const getAllUser = async (req, res) => {
 const getUserById = async (req, res) => {
 
     let id = req.body.id
-    console.log(id)
-    let user = await User.findOne({ where: { uId: id }})
+    let user = await User.findOne(
+        {
+            where: { uId: id },
+            include:[{
+                model:Role,               
+                
+            }]
+       
+    })
     res.status(200).send(user)
 
 }
@@ -86,12 +112,19 @@ const deleteUserById = async (req, res) => {
 
     let id = req.params.id
     const status =await User.destroy({ where: { uId: id }} )
-    if(status!=0){
-        res.status(200).send('Success')
-    }else{
-        res.status(200).send('Error')
-    }
-    
+    .then((data)=>{
+
+        if(status!=0){
+            res.status(200).send('Success')
+        }else{
+            res.status(200).send('Error')
+        }
+        
+    })
+    .catch((err)=>{
+        res.status(200).send(err)
+    })
+  
 
 }
 

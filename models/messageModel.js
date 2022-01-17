@@ -16,10 +16,12 @@ module.exports=(sequelize,DataTypes)=>{
         from:{
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'uId' },
+            onDelete: 'CASCADE',
         },
         to:{
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'uId' },
+            onDelete: 'CASCADE',
             
         },
         mardRead:{

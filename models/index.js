@@ -49,6 +49,18 @@ db.roominfo= require('./roominfoModel.js')(sequelize,DataTypes)
 db.payments= require('./paymentModel.js')(sequelize,DataTypes)
 db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
 db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
+db.roles= require('./roleModel.js')(sequelize,DataTypes)
+
+//one-one associations
+db.users.hasOne(db.roles,{
+    foriegnKey:{
+        type: DataTypes.INTEGER,
+        allowNull:false
+    }
+
+})
+db.roles.belongsTo(db.users)
+
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
@@ -63,9 +75,9 @@ db.roominfo.belongsTo(db.roomtypes,{as:'Roomtypes',foriegnKey:'roomTypeId'})
 
 
 db.sequelize.sync({force:false})
-//.db.sequelize.sync({force:true})
+//db.sequelize.sync({force:true})
 .then(()=>{
-    console.log('Yes,re-sync ...')
+    console.log('re-synced ...')
 })
 
 module.exports= db

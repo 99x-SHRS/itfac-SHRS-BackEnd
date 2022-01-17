@@ -19,9 +19,6 @@ module.exports=(sequelize,DataTypes)=>{
         beds:{
             type: DataTypes.INTEGER
         },
-        rent:{
-            type: DataTypes.FLOAT
-        },
         area:{
             type: DataTypes.FLOAT
         }

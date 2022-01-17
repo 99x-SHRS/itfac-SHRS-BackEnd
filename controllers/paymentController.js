@@ -5,14 +5,18 @@ const VAS= db.vas
 const Payments= db.payments
 const Customergrade= db.customergrades
 const Booking= db.bookings
+const Room= db.rooms
 var sequelize = require('sequelize');
 
 const pay= async(req,res)=>{
 
 
-    let customerid=await Booking.findOne({ where: { bookingId: req.body.bookingId },attributes:['customerid']})
+    let data=await Booking.findOne({ where: { bookingId: req.body.bookingId },attributes:['customerid','roomId']})
+    let roomRate=await Room.findOne({ where: { roomId: data.dataValues.roomId },attributes:['rate']})
+
+
   
-    let bookingTotal=  await Booking.findOne(
+    let vasTotal=  await Booking.findOne(
         { 
             where: { bookingId: req.body.bookingId },
             attributes:[[sequelize.fn('sum', sequelize.col('rate')), 'total']],
@@ -24,13 +28,15 @@ const pay= async(req,res)=>{
         })
         
     let info={
-        customerId:customerid.dataValues.customerid,
+        customerId:data.dataValues.customerid,
         paymenttypeId:req.body.paymenttypeId,
         bookingId:req.body.bookingId,
-        amount:bookingTotal.dataValues.total
+        amount:(vasTotal.dataValues.total+roomRate.rate)
     }
+    // console.log(vasTotal);
+    console.log(roomRate.rate);
+return
 
-   
     await Payments.create(info)
     .then((data)=>{
         updateCustomerGrade(data)
@@ -123,6 +129,35 @@ const paymentStatusByBookingId= async (req, res) => {
     })
     .catch(err=>console.log(err))
 }
+const totalAmountByBookingId= async(req,res)=>{
+
+
+    let data=await Booking.findOne({ where: { bookingId: req.body.id },attributes:['customerid','roomId']})
+    await Room.findOne({ where: { roomId: data.dataValues.roomId },attributes:['rate']})
+    .then(async(roomRate)=>{
+        let vasTotal=  await Booking.findOne(
+            { 
+                where: { bookingId: req.body.id },
+                attributes:[[sequelize.fn('sum', sequelize.col('rate')), 'total']],
+                group : ['bookingId'],
+                include:[{
+                    model:VAS,                        
+                }]
+                
+           })
+           console.log(vasTotal.dataValues.total+roomRate.rate);
+           let amount=vasTotal.dataValues.total+roomRate.rate
+           res.status(200).send(amount.toString())
+
+    })
+    .catch((err)=>{
+        res.status(500).send(err)
+    })
+    
+
+    
+
+}
 
 //select customer rank
 const selectGrade = (points)=>{
@@ -152,6 +187,7 @@ module.exports={
     getAllPaymentsBycustomerId,
     getAllPaymentsBybookingId,
     paymentStatusByBookingId,
-    paymentStatusByBookingId
+    totalAmountByBookingId
+
 
 }

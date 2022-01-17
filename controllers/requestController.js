@@ -3,6 +3,7 @@ var Sequelize = require('sequelize');
 const db= require('../models')
 const Op = Sequelize.Op;
 const Request= db.requests
+const Role= db.roles
 
 //send new request
 const createRequest = async(req,res) =>{
@@ -10,7 +11,7 @@ const createRequest = async(req,res) =>{
     let info={
         description:req.body.description,
         isAccepted:req.body.isAccepted,      
-        hotelAdminId:req.body.hotelAdminId
+        userId:req.body.userId
     }
 
     const user=await Request.create(info)
@@ -55,8 +56,30 @@ const acceptRequest = async(req,res)=>{
     let id= req.body.id
     let isAccepted= req.body.isAccepted
     await Request.update({isAccepted:isAccepted,responseAt:Sequelize.fn('NOW')}, { where: { requetlId: id }})
-    .then(request=>res.status(200).send(request))
-    .catch(err=>console.log(err))
+    .then(async(request)=>{
+        
+       await Request.findOne({ where: { requetlId: id },attributes:['userId']})
+        .then(async (userId)=>{
+            console.log(userId.userId);
+       
+            await Role.update({hotelAdmin:true}, { where: { userUId: userId.userId }})
+            .then((accepted)=>{
+                res.status(200).send("accepted")
+                console.log(request);
+            })
+            .catch((err)=>{
+                res.status(500).send(err)
+            })
+        })
+        .catch((err)=>{
+            res.status(500).send(err)
+        })
+       
+   
+    })
+    .catch((err)=>{
+        res.status(500).send(err)
+    })
 
 }
 

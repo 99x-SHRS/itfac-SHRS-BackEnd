@@ -22,6 +22,7 @@ module.exports=(sequelize,DataTypes)=>{
         hotelId:{
             type: DataTypes.INTEGER,
             references: { model: 'hotels', key: 'hotelId' },
+            onDelete: 'CASCADE',
         }
        
        

@@ -16,6 +16,7 @@ module.exports=(sequelize,DataTypes)=>{
         couponId:{
             type: DataTypes.INTEGER,
             references: { model: 'coupons', key: 'couponId' },
+            onDelete: 'CASCADE',
         }
        
     })

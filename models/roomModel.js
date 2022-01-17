@@ -13,16 +13,21 @@ module.exports=(sequelize,DataTypes)=>{
         description:{
             type: DataTypes.STRING
         },
-        imges:{
+        images:{
             type: DataTypes.STRING
+        },
+        rate:{
+            type: DataTypes.FLOAT
         },
         hotelId:{
             type: DataTypes.INTEGER,
             references: { model: 'hotels', key: 'hotelId' },
+            onDelete: 'CASCADE',
         },
         roomTypeId:{
             type: DataTypes.INTEGER,
             references: { model: 'roomtypes', key: 'roomTypeId' },
+            onDelete: 'CASCADE',
         }
     })
     return Room

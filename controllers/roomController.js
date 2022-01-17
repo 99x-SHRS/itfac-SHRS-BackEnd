@@ -5,7 +5,9 @@ const createRoom = async(req,res) =>{
 
     let info={
         roomNo:req.body.roomNo,
-        description:req.body.description,      
+        description:req.body.description,   
+        rate:req.body.rate,    
+        images:req.body.images,   
         hotelId:req.body.hotelId,
         roomTypeId:req.body.roomTypeId
     }

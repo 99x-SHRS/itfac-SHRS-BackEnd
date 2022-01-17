@@ -14,10 +14,12 @@ module.exports=(sequelize,DataTypes)=>{
         paymenttypeId:{
             type: DataTypes.INTEGER,
             references: { model: 'paymenttypes', key: 'paymenttypeId' },
+            onDelete: 'CASCADE',
         } ,
         bookingId:{
             type: DataTypes.INTEGER,
             references: { model: 'bookings', key: 'bookingId' },
+            onDelete: 'CASCADE',
         },
         amount:{
             type: DataTypes.REAL,

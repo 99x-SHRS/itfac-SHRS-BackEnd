@@ -8,7 +8,6 @@ const createRoomtype= async(req,res)=>{
         attributes:req.body.attributes,
         description:req.body.description,
         beds:req.body.beds,
-        rent:req.body.rent,
         area:req.body.area
 
     }

@@ -8,6 +8,8 @@ router.post('/getAllPaymentsBycustomerId',paymentController.getAllPaymentsBycust
 router.post('/getAllPaymentsBypaymentId',paymentController.getAllPaymentsBypaymentId)
 router.post('/getAllPaymentsBybookingId',paymentController.getAllPaymentsBybookingId)
 router.post('/paymentStatusByBookingId',paymentController.paymentStatusByBookingId)
+router.post('/totalAmountByBookingId',paymentController.totalAmountByBookingId)
+
 
 
 module.exports=router
