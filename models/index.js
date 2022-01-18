@@ -50,6 +50,8 @@ db.payments= require('./paymentModel.js')(sequelize,DataTypes)
 db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
 db.customergrades= require('./customergradeModel.js')(sequelize,DataTypes)
 db.roles= require('./roleModel.js')(sequelize,DataTypes)
+db.saved_room= require('./savedroomModel.js')(sequelize,DataTypes)
+
 
 //one-one associations
 db.users.hasOne(db.roles,{
@@ -72,6 +74,8 @@ db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' })
 db.roominfo.belongsTo(db.rooms,{as:'Room',foriegnKey:'roomId'})
 db.roominfo.belongsTo(db.hotels,{as:'Hotel',foriegnKey:'hotelId'})
 db.roominfo.belongsTo(db.roomtypes,{as:'Roomtypes',foriegnKey:'roomTypeId'})
+
+
 
 
 db.sequelize.sync({force:false})

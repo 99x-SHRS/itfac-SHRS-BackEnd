@@ -1,6 +1,8 @@
 const db= require('../models')
 const Room= db.rooms
 
+
+
 const createRoom = async(req,res) =>{
 
     let info={
@@ -118,6 +120,8 @@ const deleteRoomById = async (req, res) => {
     
 
 }
+
+
 
 module.exports={
     createRoom,

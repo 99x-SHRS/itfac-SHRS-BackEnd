@@ -36,8 +36,12 @@ const addUser= async(req,res)=>{
    .then((user)=>{
        user.createRole(roleInfo)
        .then((data)=>{
-        res.status(500).send(user)
+        res.status(200).send(user)
        })
+       .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
        
        
    })
@@ -52,18 +56,24 @@ const login= async (req,res)=>{
 
     let email =req.body.email
     let password =req.body.password
-    let user = await User.findOne({ where: { email: email }})
-
-    if (user==null) {
-        res.status(200).send("Cannot find user")
-    }else{
-        if (await bcrpt.compare(password,user.password)) {
-            res.status(200).send("Success")
+    await User.findOne({ where: { email: email }})
+    .then(async(user)=>{
+        if (user==null) {
+            res.status(200).send("Cannot find user")
         }else{
-            res.status(200).send("Failed")
+            if (await bcrpt.compare(password,user.password)) {
+                res.status(200).send("Success")
+            }else{
+                res.status(200).send("Failed")
+            }
+    
         }
-
-    }
+       })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
+   
 
 }
 
