@@ -9,6 +9,7 @@ const createRoom = async(req,res) =>{
         roomNo:req.body.roomNo,
         description:req.body.description,   
         rate:req.body.rate,    
+        qty:req.body.qty,  
         images:req.body.images,   
         hotelId:req.body.hotelId,
         roomTypeId:req.body.roomTypeId
@@ -33,7 +34,7 @@ const getAllRooms = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -50,7 +51,7 @@ const getRoomById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -66,7 +67,7 @@ const getRoomByHotelId = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 }
 //Get room by hotel ID and room type
@@ -81,7 +82,7 @@ const getRoomsByHotelIdAndRoomType = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 }
 //  update room by ID
@@ -95,7 +96,7 @@ const updateRoomById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
    
 }
@@ -114,7 +115,7 @@ const deleteRoomById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
    
     

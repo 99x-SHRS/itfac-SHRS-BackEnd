@@ -46,7 +46,7 @@ const getReviewById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -61,7 +61,7 @@ const updateReviewById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
    
 }
@@ -80,7 +80,7 @@ const deleteReviewById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
    
 
@@ -98,7 +98,7 @@ const getReviewByHotelId = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -115,7 +115,7 @@ const getReviewByCustomerId = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -132,7 +132,7 @@ const getReviewByCustomerIdAndHotelId = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }

@@ -17,7 +17,7 @@ const createCoupon= async(req,res)=>{
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }
@@ -31,7 +31,7 @@ const getAllCoupons = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
 
 }

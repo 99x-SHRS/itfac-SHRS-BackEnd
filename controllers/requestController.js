@@ -1,7 +1,6 @@
 const { NOW } = require('sequelize');
 var Sequelize = require('sequelize');
 const db= require('../models')
-const Op = Sequelize.Op;
 const Request= db.requests
 const Role= db.roles
 

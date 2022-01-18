@@ -50,7 +50,7 @@ const updatPaymentTypeById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })
    
 }
@@ -69,7 +69,7 @@ const deletePaymenTypeById = async (req, res) => {
     })
     .catch((err)=>{
         console.log(err)
-        res.status(200).send(err)
+        res.status(500).send(err)
     })  
 
 }

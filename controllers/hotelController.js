@@ -1,6 +1,7 @@
 const db= require('../models')
+var Sequelize = require('sequelize');
 const Hotel= db.hotels
-
+const Op = Sequelize.Op;
 
 //register new hotel
 const registerHotel = async(req,res) =>{
@@ -64,13 +65,59 @@ const deleteHotelById = async (req, res) => {
     })
     
 }
+//get hotels by province
+const getAllHotelsByProvince = async (req, res) => {
+
+    let province = req.body.province
+    let hotel = await Hotel.findAll({ where: { province: province }})
+    res.status(200).send(hotel)
+
+}
+//get hotels by district
+const getAllHotelsByDistrict = async (req, res) => {
+
+    let district = req.body.district
+    let hotel = await Hotel.findAll({ where: { district: district }})
+    res.status(200).send(hotel)
+
+}
+//get hotels by district
+const search = async (req, res) => {
+
+    let location = req.body.location
+    let keyword="%"+location+"%"
+    let hotel = await Hotel.findAll({ where: 
+        { [Op.or]:
+             [
+                 {name:{[Op.like]: keyword}      },
+                 {district:{[Op.like]: keyword}  },
+                 {district:{[Op.like]: keyword}  },
+                 {province: {[Op.like]: keyword} },
+                 {town: {[Op.like]: keyword}     }, 
+                 {Street1: {[Op.like]: keyword}  },
+                 {Street2: {[Op.like]: keyword   }}
+            ] 
+       }
+    })
+    .then((rooms)=>{
+        res.status(200).send(hotel)
+    })
+    .catch((err)=>{
+        res.status(500).send(err)
+    })
+    
+
+}
+
 
 module.exports={
     registerHotel,
     getAllHotels,
     getHotelById,
     updateHotelById,
-    deleteHotelById
-    
+    deleteHotelById,
+    getAllHotelsByProvince,
+    getAllHotelsByDistrict,
+    search    
    
 }

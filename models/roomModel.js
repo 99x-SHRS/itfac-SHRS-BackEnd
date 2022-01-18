@@ -19,6 +19,9 @@ module.exports=(sequelize,DataTypes)=>{
         rate:{
             type: DataTypes.FLOAT
         },
+        availableQty:{
+            type: DataTypes.INTEGER
+        },
         hotelId:{
             type: DataTypes.INTEGER,
             references: { model: 'hotels', key: 'hotelId' },
