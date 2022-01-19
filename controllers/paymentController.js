@@ -11,8 +11,8 @@ var sequelize = require('sequelize');
 const pay= async(req,res)=>{
 
 
-    let data=await Booking.findOne({ where: { bookingId: req.body.bookingId },attributes:['customerid','roomId']})
-    let roomRate=await Room.findOne({ where: { roomId: data.dataValues.roomId },attributes:['rate']})
+    let data=await Booking.findOne({ where: { bookingId: req.body.bookingId },attributes:['customerid','roomRoomId','noRooms']})
+    let roomRate=await Room.findOne({ where: { roomId: data.dataValues.roomRoomId },attributes:['rate']})
 
 
   
@@ -31,11 +31,11 @@ const pay= async(req,res)=>{
         customerId:data.dataValues.customerid,
         paymenttypeId:req.body.paymenttypeId,
         bookingId:req.body.bookingId,
-        amount:(vasTotal.dataValues.total+roomRate.rate)
+        amount:(vasTotal.dataValues.total+roomRate.rate*data.dataValues.noRooms)
     }
     // console.log(vasTotal);
-    console.log(roomRate.rate);
-return
+    // console.log(data.dataValues.noRooms);
+
 
     await Payments.create(info)
     .then((data)=>{
@@ -60,7 +60,7 @@ const getAllPayments= async (req, res) => {
 const getAllPaymentsBypaymentId = async (req, res) => {
 
     let id = req.body.id
-    let payments = await Payments.findOne({ where: { paymentId: id }})
+    let payments = await Payments.findAll({ where: { paymentId: id }})
     res.status(200).send(payments)
 
 }
@@ -69,7 +69,7 @@ const getAllPaymentsBypaymentId = async (req, res) => {
 const getAllPaymentsBycustomerId = async (req, res) => {
 
     let id = req.body.id
-    let payments = await Payments.findOne({ where: { customerId: id }})
+    let payments = await Payments.findAll({ where: { customerId: id }})
     res.status(200).send(payments)
 
 }
@@ -78,7 +78,7 @@ const getAllPaymentsBycustomerId = async (req, res) => {
 const getAllPaymentsBybookingId = async (req, res) => {
 
     let id = req.body.id
-    let payments = await Payments.findOne({ where: { bookingId: id }})
+    let payments = await Payments.findAll({ where: { bookingId: id }})
     res.status(200).send(payments)
 
 }
@@ -132,27 +132,31 @@ const paymentStatusByBookingId= async (req, res) => {
 const totalAmountByBookingId= async(req,res)=>{
 
 
-    let data=await Booking.findOne({ where: { bookingId: req.body.id },attributes:['customerid','roomId']})
-    await Room.findOne({ where: { roomId: data.dataValues.roomId },attributes:['rate']})
-    .then(async(roomRate)=>{
-        let vasTotal=  await Booking.findOne(
-            { 
-                where: { bookingId: req.body.id },
-                attributes:[[sequelize.fn('sum', sequelize.col('rate')), 'total']],
-                group : ['bookingId'],
-                include:[{
-                    model:VAS,                        
-                }]
-                
-           })
-           console.log(vasTotal.dataValues.total+roomRate.rate);
-           let amount=vasTotal.dataValues.total+roomRate.rate
-           res.status(200).send(amount.toString())
-
+    await Booking.findOne({ where: { bookingId: req.body.id },attributes:['customerid','roomRoomId','noRooms']})
+    .then(async(data)=>{
+       
+        await Room.findOne({ where: { roomId: data.dataValues.roomRoomId },attributes:['rate']})
+        .then(async(roomRate)=>{
+            let vasTotal=  await Booking.findOne(
+                { 
+                    where: { bookingId: req.body.id },
+                    attributes:[[sequelize.fn('sum', sequelize.col('rate')), 'total']],
+                    group : ['bookingId'],
+                    include:[{
+                        model:VAS,                        
+                    }]
+                    
+               })
+              
+               let amount=vasTotal.dataValues.total+roomRate.rate*data.noRooms
+               res.status(200).send(amount.toString())
+    
+        })
+        .catch((err)=>{
+            res.status(500).send(err)
+        })
     })
-    .catch((err)=>{
-        res.status(500).send(err)
-    })
+   
     
 
     

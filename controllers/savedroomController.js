@@ -54,6 +54,13 @@ const reserveSavedBooking = async (req, res) => {
     })
 
 }
+const getSavedRoomByCustomerId = async (req, res) => {
+
+    let id = req.body.id
+    let room = await Saved_room.findAll({ where: { customerId: id }})
+    res.status(200).send(room)
+
+}
 //  Delete saved room by ID
 const deleteSavedBookingByID = async (req, res) => {
 
@@ -80,6 +87,7 @@ const deleteSavedBookingByID = async (req, res) => {
 module.exports={
     saveRoom,
     reserveSavedBooking,
-    deleteSavedBookingByID
+    deleteSavedBookingByID,
+    getSavedRoomByCustomerId
   
 }

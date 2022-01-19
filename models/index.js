@@ -65,21 +65,21 @@ db.roles.belongsTo(db.users)
 
 
 //many-many associations
-db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS' })
-db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS' })
+db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS',onDelete: 'cascade' })
+db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS',onDelete: 'cascade' })
 
-db.bookings.belongsToMany(db.vas, { through: 'Booking_VAS' })
-db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' })
+db.bookings.belongsToMany(db.vas, { through: 'Booking_VAS',onDelete: 'cascade' })
+db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' ,onDelete: 'cascade'})
 
 // db.roominfo.belongsTo(db.rooms)
 // db.roominfo.belongsTo(db.hotels)
 // db.roominfo.belongsTo(db.bookings)
 
-db.bookings.belongsTo(db.rooms)
-db.bookings.belongsTo(db.hotels)
+db.bookings.belongsTo(db.rooms,{ onDelete: 'cascade' })
+db.bookings.belongsTo(db.hotels,{ onDelete: 'cascade' })
 
-db.rooms.belongsTo(db.hotels)
-db.rooms.belongsTo(db.roomtypes)
+db.rooms.belongsTo(db.hotels,{ onDelete: 'cascade' })
+db.rooms.belongsTo(db.roomtypes,{ onDelete: 'cascade' })
 
 
 

@@ -97,7 +97,6 @@ const search = async (req, res) => {
     let adult = req.body.adult
     let children = req.body.children
     let reqRooms = req.body.rooms
-    var date = new Date()
     let startDate = new Date(req.body.checkInDate)
     let endDate = new Date(req.body.checkOutDate)
     let keyword="%"+location+"%"

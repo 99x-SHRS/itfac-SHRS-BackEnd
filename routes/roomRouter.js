@@ -13,6 +13,7 @@ router.delete('/deleteRoomById/:id',roomController.deleteRoomById)
 
 router.post('/saveRoom',savedroomController.saveRoom)
 router.post('/reserveSavedBooking',savedroomController.reserveSavedBooking)
+router.post('/getSavedRoomByCustomerId',savedroomController.getSavedRoomByCustomerId)
 router.post('/deleteSavedBookingByID',savedroomController.deleteSavedBookingByID)
 
 module.exports=router

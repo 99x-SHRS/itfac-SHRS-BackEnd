@@ -11,6 +11,7 @@ const createRoom = async(req,res) =>{
         rate:req.body.rate,    
         availableQty:req.body.availableQty,  
         images:req.body.images,   
+        persons:req.body.persons,   
         hotelHotelId:req.body.hotelId,
         roomtypeRoomTypeId:req.body.roomTypeId
     }
