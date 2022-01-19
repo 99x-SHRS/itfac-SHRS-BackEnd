@@ -19,22 +19,20 @@ module.exports=(sequelize,DataTypes)=>{
         rate:{
             type: DataTypes.FLOAT
         },
+        persons:{
+            type: DataTypes.INTEGER
+        },
         availableQty:{
             type: DataTypes.INTEGER,
             validate: {
                 min: 0
             }
         },
-        hotelId:{
-            type: DataTypes.INTEGER,
-            references: { model: 'hotels', key: 'hotelId' },
-            onDelete: 'CASCADE',
-        },
-        roomTypeId:{
-            type: DataTypes.INTEGER,
-            references: { model: 'roomtypes', key: 'roomTypeId' },
-            onDelete: 'CASCADE',
-        }
+        // roomTypeId:{
+        //     type: DataTypes.INTEGER,
+        //     references: { model: 'roomtypes', key: 'roomTypeId' },
+        //     onDelete: 'CASCADE',
+        // }
     })
     return Room
 }

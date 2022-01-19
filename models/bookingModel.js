@@ -24,16 +24,15 @@ module.exports=(sequelize,DataTypes)=>{
         rentCar:{
             type: DataTypes.BOOLEAN
         },
+        noRooms:{
+            type: DataTypes.INTEGER
+        },
         customerId:{
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'uId' },   
             onDelete: 'CASCADE',         
         },
-        roomId:{
-            type: DataTypes.INTEGER,
-            references: { model: 'rooms', key: 'roomId' },
-            onDelete: 'CASCADE',
-        }
+        
 
 
 

@@ -8,6 +8,8 @@ const Roominfo= db.roominfo
 //new booking
 const booking = async(req,res) =>{
 
+   await Room.findOne({attributes:['hotelHotelId'], where: { roomId: req.body.roomId }})
+   .then(async(hotelId)=>{
     let info={
         checkInDate:req.body.checkInDate,
         checkOutDate:req.body.checkOutDate,
@@ -16,8 +18,12 @@ const booking = async(req,res) =>{
         guestName:req.body.guestName,
         rentCar:req.body.rentCar,
         customerId:req.body.customerId,
-        roomId:req.body.roomId,
+        roomRoomId:req.body.roomId,
+        hotelHotelId:hotelId.hotelHotelId,
+        noRooms:req.body.noRooms,
+
     }
+
     let vasId= req.body.vasId
     let vasinfo = await VAS.findOne({ where: { vasId: vasId }})
 
@@ -26,31 +32,7 @@ const booking = async(req,res) =>{
         booking.addVas(vasinfo)
         .then(async(data)=>{
             
-            // Room.increment('availableQty', {by:-1, where: { roomId: req.body.roomId }})
-             Room.findOne({attributes:['hotelId'], where: { roomId: req.body.roomId }})
-            .then(async(hotelId)=>{
-         
-                let bookingInfo={
-                    roomRoomId:req.body.roomId,
-                    hotelHotelId:hotelId.hotelId,
-                    bookingBookingId:booking.bookingId
-                }
-                await Roominfo.create(bookingInfo)
-                .then((data)=>{
-                    res.status(200).send(booking)
-                })
-                .catch((err)=>{
-                    console.log(err)
-                    res.status(500).send(err)
-                })
-            
-
-            })
-            .catch((err)=>{
-                console.log(err)
-                res.status(500).send(err)
-            })
-
+            res.status(200).send(booking)
         })
         .catch((err)=>{
             console.log(err)
@@ -62,6 +44,12 @@ const booking = async(req,res) =>{
         console.log(err)
         res.status(500).send(err)
     })
+   })
+   .catch((err)=>{
+    res.status(500).send(err)
+})
+  
+   
 
 }
 

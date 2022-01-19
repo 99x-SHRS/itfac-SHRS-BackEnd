@@ -1,11 +1,12 @@
 const db= require('../models')
 var Sequelize = require('sequelize');
-const { bookings } = require('../models');
+var sequelize = require('sequelize');
+const { where } = require('sequelize');
 const Hotel= db.hotels
 const Op = Sequelize.Op;
-const Roominfo= db.roominfo
 const Booking= db.bookings
 const Room= db.rooms
+const Roomtypes= db.roomtypes
 
 
 
@@ -87,53 +88,29 @@ const getAllHotelsByDistrict = async (req, res) => {
     res.status(200).send(hotel)
 
 }
-//get hotels by district
+
+
+//  search hotel
 const search = async (req, res) => {
 
     let location = req.body.location
-    let keyword="%"+location+"%"
-    let hotel = await Hotel.findAll({ where: 
-        { [Op.or]:
-             [
-                 {name:{[Op.like]: keyword}      },
-                 {district:{[Op.like]: keyword}  },
-                 {district:{[Op.like]: keyword}  },
-                 {province: {[Op.like]: keyword} },
-                 {town: {[Op.like]: keyword}     }, 
-                 {Street1: {[Op.like]: keyword}  },
-                 {Street2: {[Op.like]: keyword   }}
-            ] 
-       },
-       
-    })
-    .then((rooms)=>{
-        res.status(200).send(hotel)
-    })
-    .catch((err)=>{
-        res.status(500).send(err)
-    })
-    
-
-}
-
-//  get all booking info (hotel room booking)
-const hotelInfo = async (req, res) => {
-    let location = req.body.location
+    let adult = req.body.adult
+    let children = req.body.children
+    let reqRooms = req.body.rooms
     var date = new Date()
     let startDate = new Date(req.body.checkInDate)
     let endDate = new Date(req.body.checkOutDate)
     let keyword="%"+location+"%"
-   
-    await Roominfo.findAll({
+
+    //calculate persons per room 
+    let totalPerson =parseInt(adult)+parseFloat(children/2)
+    let personPerRoom=Math.round(totalPerson/reqRooms)
+    // console.log(personPerRoom);
+    await Booking.findAll({
       
-        attributes: ["hotel.name", "hotel.district","hotel.province","hotel.Street1"], 
-        include:[
-            {
-      
-                model:Booking,
-                required: true, 
-                as:'booking',
-                where :
+        attributes:[['roomRoomId','roomId'],[sequelize.fn('sum', sequelize.col('noRooms')), 'total']],
+        group : ['roomRoomId'],
+        where :
                  {[Op.or]:[
                      {
                         "checkInDate": {
@@ -152,14 +129,13 @@ const hotelInfo = async (req, res) => {
                           },
                      },
                      
-                ]
-                    
-                  }
-                
-            },
+                ]},
+
+        include:[
+            
             {
-                model:Hotel,
-                required: true, 
+                attributes:[],
+                model:Hotel,  
                 as:'hotel',
                 where: 
                 { [Op.or]:
@@ -175,15 +151,95 @@ const hotelInfo = async (req, res) => {
                },
             },
             {
+                attributes:[],
                 model:Room,
-                required: true, 
                 as:'room'
             },
         ]
     })
     .then((info)=>{
-        // console.log(JSON.parse(info));
-        res.status(200).send(info)
+        console.log(info);
+       
+        //info gives all the booked rooms and room count
+        // get all the rooms
+        Room.findAll({
+            // attributes:['roomId','availableQty'],
+            where:{
+                    persons:{
+                        [Op.gte]:personPerRoom
+                    }
+            },
+            include:[
+                {
+                    // attributes:[],
+                    model:Hotel,  
+                    as:'hotel',
+                    where: 
+                    { [Op.or]:
+                         [
+                             {name:{[Op.like]: keyword}      },
+                             {district:{[Op.like]: keyword}  },
+                             {district:{[Op.like]: keyword}  },
+                             {province: {[Op.like]: keyword} },
+                             {town: {[Op.like]: keyword}     }, 
+                             {Street1: {[Op.like]: keyword}  },
+                             {Street2: {[Op.like]: keyword   }}
+                        ] 
+                   },
+                },
+                {
+                    // attributes:[],
+                    model:Roomtypes,
+                    as:'roomtype'
+                    
+                },
+               
+            ]
+        })
+        .then((rooms)=>{
+            var len =  Object.keys(rooms).length;
+            console.log(info);
+            for(var room in rooms){
+              
+                for(var bookedRoom in info){
+                   
+                    // console.log(room);
+                    // console.log(bookedRoom);                  
+                    // console.log(rooms[room].availableQty);
+                    // console.log((parseInt(info[bookedRoom].dataValues.total))+parseInt(reqRooms));
+                    // console.log("----");
+                    if (room==bookedRoom && parseInt(rooms[room].availableQty)<=(parseInt(info[bookedRoom].dataValues.total))+parseInt(reqRooms) ) {
+                        // console.log("------------");
+                        // console.log(room);
+                        // console.log(bookedRoom);
+                        // console.log(rooms[room].availableQty);
+                        // console.log(info[bookedRoom].dataValues.total);
+
+                        // console.log("------------");
+                        delete rooms[room]
+                        console.log("removed from the list");
+                        
+                    }else{
+                        // console.log(rooms[room].availableQty);
+                        try {
+                            rooms[room].availableQty=rooms[room].availableQty-info[bookedRoom].dataValues.total
+                        } catch (err) {
+                            console.log(err);
+                        }
+                         
+                     
+                    }
+                    
+    
+                }
+                //  console.log(info);
+
+            }
+            res.send(rooms)
+        })
+
+    
+        // res.status(200).send(info)
     })
     .catch((err)=>{
         console.log(err)
@@ -191,6 +247,8 @@ const hotelInfo = async (req, res) => {
     })
    
 }
+
+
 
 module.exports={
     registerHotel,
@@ -201,6 +259,6 @@ module.exports={
     getAllHotelsByProvince,
     getAllHotelsByDistrict,
     search,
-    hotelInfo    
+
    
 }
