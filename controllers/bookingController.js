@@ -2,6 +2,8 @@ const db= require('../models')
 const Booking= db.bookings
 const VAS= db.vas
 const Hotel= db.hotels
+const Room= db.rooms
+const Roominfo= db.roominfo
 
 //new booking
 const booking = async(req,res) =>{
@@ -22,7 +24,39 @@ const booking = async(req,res) =>{
     await Booking.create(info)
     .then(booking=>{
         booking.addVas(vasinfo)
-        res.status(200).send(booking)
+        .then(async(data)=>{
+            
+            // Room.increment('availableQty', {by:-1, where: { roomId: req.body.roomId }})
+             Room.findOne({attributes:['hotelId'], where: { roomId: req.body.roomId }})
+            .then(async(hotelId)=>{
+         
+                let bookingInfo={
+                    roomRoomId:req.body.roomId,
+                    hotelHotelId:hotelId.hotelId,
+                    bookingBookingId:booking.bookingId
+                }
+                await Roominfo.create(bookingInfo)
+                .then((data)=>{
+                    res.status(200).send(booking)
+                })
+                .catch((err)=>{
+                    console.log(err)
+                    res.status(500).send(err)
+                })
+            
+
+            })
+            .catch((err)=>{
+                console.log(err)
+                res.status(500).send(err)
+            })
+
+        })
+        .catch((err)=>{
+            console.log(err)
+            res.status(500).send(err)
+        })
+        
     })
     .catch((err)=>{
         console.log(err)
@@ -133,6 +167,7 @@ const addVASToBooking = async(req,res) =>{
     })
 
 }
+
 
 
 

@@ -1,7 +1,13 @@
 const db= require('../models')
 var Sequelize = require('sequelize');
+const { bookings } = require('../models');
 const Hotel= db.hotels
 const Op = Sequelize.Op;
+const Roominfo= db.roominfo
+const Booking= db.bookings
+const Room= db.rooms
+
+
 
 //register new hotel
 const registerHotel = async(req,res) =>{
@@ -97,7 +103,8 @@ const search = async (req, res) => {
                  {Street1: {[Op.like]: keyword}  },
                  {Street2: {[Op.like]: keyword   }}
             ] 
-       }
+       },
+       
     })
     .then((rooms)=>{
         res.status(200).send(hotel)
@@ -109,6 +116,81 @@ const search = async (req, res) => {
 
 }
 
+//  get all booking info (hotel room booking)
+const hotelInfo = async (req, res) => {
+    let location = req.body.location
+    var date = new Date()
+    let startDate = new Date(req.body.checkInDate)
+    let endDate = new Date(req.body.checkOutDate)
+    let keyword="%"+location+"%"
+   
+    await Roominfo.findAll({
+      
+        attributes: ["hotel.name", "hotel.district","hotel.province","hotel.Street1"], 
+        include:[
+            {
+      
+                model:Booking,
+                required: true, 
+                as:'booking',
+                where :
+                 {[Op.or]:[
+                     {
+                        "checkInDate": {
+                            [Op.and]: {
+                              [Op.gte]: startDate,
+                              [Op.lte]: endDate
+                            }
+                          },
+                     },
+                     {
+                        "checkOutDate": {
+                            [Op.and]: {
+                              [Op.gte]: startDate,
+                              [Op.lte]: endDate
+                            }
+                          },
+                     },
+                     
+                ]
+                    
+                  }
+                
+            },
+            {
+                model:Hotel,
+                required: true, 
+                as:'hotel',
+                where: 
+                { [Op.or]:
+                     [
+                         {name:{[Op.like]: keyword}      },
+                         {district:{[Op.like]: keyword}  },
+                         {district:{[Op.like]: keyword}  },
+                         {province: {[Op.like]: keyword} },
+                         {town: {[Op.like]: keyword}     }, 
+                         {Street1: {[Op.like]: keyword}  },
+                         {Street2: {[Op.like]: keyword   }}
+                    ] 
+               },
+            },
+            {
+                model:Room,
+                required: true, 
+                as:'room'
+            },
+        ]
+    })
+    .then((info)=>{
+        // console.log(JSON.parse(info));
+        res.status(200).send(info)
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send(err)
+    })
+   
+}
 
 module.exports={
     registerHotel,
@@ -118,6 +200,7 @@ module.exports={
     deleteHotelById,
     getAllHotelsByProvince,
     getAllHotelsByDistrict,
-    search    
+    search,
+    hotelInfo    
    
 }

@@ -20,7 +20,10 @@ module.exports=(sequelize,DataTypes)=>{
             type: DataTypes.FLOAT
         },
         availableQty:{
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            validate: {
+                min: 0
+            }
         },
         hotelId:{
             type: DataTypes.INTEGER,

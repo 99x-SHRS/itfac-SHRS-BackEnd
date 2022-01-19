@@ -71,9 +71,9 @@ db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS' })
 db.bookings.belongsToMany(db.vas, { through: 'Booking_VAS' })
 db.vas.belongsToMany(db.bookings, { through: 'Booking_VAS' })
 
-db.roominfo.belongsTo(db.rooms,{as:'Room',foriegnKey:'roomId'})
-db.roominfo.belongsTo(db.hotels,{as:'Hotel',foriegnKey:'hotelId'})
-db.roominfo.belongsTo(db.roomtypes,{as:'Roomtypes',foriegnKey:'roomTypeId'})
+db.roominfo.belongsTo(db.rooms)
+db.roominfo.belongsTo(db.hotels)
+db.roominfo.belongsTo(db.bookings)
 
 
 
