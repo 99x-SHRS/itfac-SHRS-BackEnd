@@ -46,6 +46,7 @@ const updateHotelById = async (req, res) => {
   const hotel = await Hotel.update(req.body, { where: { hotelId: id } })
   res.status(200).send(hotel)
 }
+
 //delete a hotel by id
 const deleteHotelById = async (req, res) => {
   let id = req.params.id
@@ -73,6 +74,20 @@ const getAllHotelsByDistrict = async (req, res) => {
   let hotel = await Hotel.findAll({ where: { district: district } })
   res.status(200).send(hotel)
 }
+//get hotels page by page and status
+const getHotelsByStatus = async (req, res) => {
+  let page = req.body.page
+  let status = req.body.status
+
+  let offset = page * 10
+
+  let hotel = await Hotel.findAll({
+    where: { status: status },
+    offset: offset,
+    limit: 10,
+  })
+  res.status(200).send(hotel)
+}
 
 //  search hotel
 const search = async (req, res) => {
@@ -87,6 +102,7 @@ const search = async (req, res) => {
   //calculate persons per room
   let totalPerson = parseInt(adult) + parseFloat(children / 2)
   let personPerRoom = Math.round(totalPerson / reqRooms)
+
   // console.log(personPerRoom);
   await Booking.findAll({
     attributes: [
@@ -230,4 +246,5 @@ module.exports = {
   getAllHotelsByProvince,
   getAllHotelsByDistrict,
   search,
+  getHotelsByStatus,
 }
