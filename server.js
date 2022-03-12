@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const { urlencoded } = require('express')
 const app = express()
-
+require('dotenv').config()
 var corOption = {
   origin: 'http://localhost:8000',
 }
@@ -21,35 +21,44 @@ app.use(function (req, res, next) {
 app.use(express.urlencoded({ extended: true }))
 
 //routers
-const userRouter = require('./routes/userRouter.js')
-const messageRouter = require('./routes/messageRouter.js')
-const hotelRouter = require('./routes/hotelRouter.js')
-const requestRouter = require('./routes/requestRouter.js')
-const refferalRouter = require('./routes/refferalRouter.js')
-const couponRouter = require('./routes/couponRouter.js')
-const roomRouter = require('./routes/roomRouter.js')
-const roomtypeRouter = require('./routes/roomtypeRouter.js')
-const bookingRouter = require('./routes/bookingRouter.js')
-const souvenirRouter = require('./routes/souvenirRouter.js')
-const paymenttypeRouter = require('./routes/paymenttypeRouter.js')
-const reviewRouter = require('./routes/reviewRouter.js')
-const vasRouter = require('./routes/vasRouter.js')
-const paymentRouter = require('./routes/paymentRouter.js')
 
-app.use('/api/users', userRouter)
-app.use('/api/message', messageRouter)
-app.use('/api/hotel', hotelRouter)
-app.use('/api/request', requestRouter)
-app.use('/api/refferal', refferalRouter)
-app.use('/api/coupon', couponRouter)
-app.use('/api/room', roomRouter)
-app.use('/api/roomtype', roomtypeRouter)
-app.use('/api/booking', bookingRouter)
-app.use('/api/souvenir', souvenirRouter)
+const userRouter = require('./src/api/routes/userRouter.js')
+const messageRouter = require('./src/api/routes/messageRouter.js')
+const hotelRouter = require('./src/api/routes/hotelRouter.js')
+const requestRouter = require('./src/api/routes/requestRouter.js')
+const refferalRouter = require('./src/api/routes/refferalRouter.js')
+const couponRouter = require('./src/api/routes/couponRouter.js')
+const roomRouter = require('./src/api/routes/roomRouter.js')
+const roomtypeRouter = require('./src/api/routes/roomtypeRouter.js')
+const bookingRouter = require('./src/api/routes/bookingRouter.js')
+const souvenirRouter = require('./src/api/routes/souvenirRouter.js')
+const paymenttypeRouter = require('./src/api/routes/paymenttypeRouter.js')
+const reviewRouter = require('./src/api/routes/reviewRouter.js')
+const vasRouter = require('./src/api/routes/vasRouter.js')
+const paymentRouter = require('./src/api/routes/paymentRouter.js')
+
+//auth middleware
+const authenticateToken =
+  require('./src/auth/authentication.js').authenticateToken
+
+//auth endpoints
+app.use('/auth/user/', userRouter)
+
+//api
+app.use('/api/user', authenticateToken, userRouter)
+app.use('/api/message', authenticateToken, messageRouter)
+app.use('/api/hotel', authenticateToken, hotelRouter)
+app.use('/api/request', authenticateToken, requestRouter)
+app.use('/api/refferal', authenticateToken, refferalRouter)
+app.use('/api/coupon', authenticateToken, couponRouter)
+app.use('/api/room', authenticateToken, roomRouter)
+app.use('/api/roomtype', authenticateToken, roomtypeRouter)
+app.use('/api/booking', authenticateToken, bookingRouter)
+app.use('/api/souvenir', authenticateToken, souvenirRouter)
 app.use('/api/paymenttype', paymenttypeRouter)
-app.use('/api/review', reviewRouter)
-app.use('/api/vas', vasRouter)
-app.use('/api/payment', paymentRouter)
+app.use('/api/review', authenticateToken, reviewRouter)
+app.use('/api/vas', authenticateToken, vasRouter)
+app.use('/api/payment', authenticateToken, paymentRouter)
 
 //test api
 app.get('/', (req, res) => {
