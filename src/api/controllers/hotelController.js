@@ -81,12 +81,17 @@ const getHotelsByStatus = async (req, res) => {
 
   let offset = page * 10
 
-  let hotel = await Hotel.findAll({
+  await Hotel.findAll({
     where: { status: status },
     offset: offset,
     limit: 10,
   })
-  res.status(200).send(hotel)
+    .then((hotel) => {
+      res.status(200).send(hotel)
+    })
+    .catch((err) => {
+      res.status(400).send(hotel)
+    })
 }
 
 //  search hotel
