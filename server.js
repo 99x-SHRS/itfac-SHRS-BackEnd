@@ -45,20 +45,20 @@ const authenticateToken =
 app.use('/auth/user/', userRouter)
 
 //api
-app.use('/api/user', userRouter)
-app.use('/api/message', messageRouter)
-app.use('/api/hotel', hotelRouter)
-app.use('/api/request', requestRouter)
-app.use('/api/refferal', refferalRouter)
-app.use('/api/coupon', couponRouter)
-app.use('/api/room', roomRouter)
-app.use('/api/roomtype', roomtypeRouter)
-app.use('/api/booking', bookingRouter)
-app.use('/api/souvenir', souvenirRouter)
+app.use('/api/user', authenticateToken, userRouter)
+app.use('/api/message', authenticateToken, messageRouter)
+app.use('/api/hotel', authenticateToken, hotelRouter)
+app.use('/api/request', authenticateToken, requestRouter)
+app.use('/api/refferal', authenticateToken, refferalRouter)
+app.use('/api/coupon', authenticateToken, couponRouter)
+app.use('/api/room', authenticateToken, roomRouter)
+app.use('/api/roomtype', authenticateToken, roomtypeRouter)
+app.use('/api/booking', authenticateToken, bookingRouter)
+app.use('/api/souvenir', authenticateToken, souvenirRouter)
 app.use('/api/paymenttype', paymenttypeRouter)
-app.use('/api/review', reviewRouter)
-app.use('/api/vas', vasRouter)
-app.use('/api/payment', paymentRouter)
+app.use('/api/review', authenticateToken, reviewRouter)
+app.use('/api/vas', authenticateToken, vasRouter)
+app.use('/api/payment', authenticateToken, paymentRouter)
 
 //test api
 app.get('/', (req, res) => {
