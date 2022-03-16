@@ -56,10 +56,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'hello' })
 })
 
-//port
-// const PORT = process.env.PORT || 8000
-
 //server
-app.listen(process.env.PORT | PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log(`server is running port ${PORT} `)
 })
