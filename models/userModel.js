@@ -9,7 +9,8 @@ module.exports=(sequelize,DataTypes)=>{
         },
         email:{
             type: DataTypes.STRING,
-            validate: { isEmail: true }
+            unique: true,
+            allowNull:false
         
         },
         contactNo:{
@@ -22,7 +23,7 @@ module.exports=(sequelize,DataTypes)=>{
         },
         lastName:{
             type: DataTypes.STRING,
-            allowNull: false
+           
 
         },
         password:{
