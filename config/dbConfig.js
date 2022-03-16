@@ -1,7 +1,7 @@
 module.exports = {
-  HOST: 'localhost',
-  USER: 'root',
-  PASSWORD: '',
+  HOST: 'us-cdbr-east-05.cleardb.net',
+  USER: 'be8aa5ee0660e5',
+  PASSWORD: 'be8aa5ee0660e5',
   DB: 'hotel_managemant',
   dialect: 'mysql',
   pool: {
