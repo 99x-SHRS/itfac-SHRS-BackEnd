@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     attributes: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
     },
     description: {
       type: DataTypes.STRING,
