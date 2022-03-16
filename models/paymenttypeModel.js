@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     paymentOption: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
     },
     couponId: {
       type: DataTypes.INTEGER,

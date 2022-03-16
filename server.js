@@ -2,10 +2,6 @@ const express = require('express')
 const cors = require('cors')
 const { urlencoded } = require('express')
 const app = express()
-let port = process.env.PORT || 3000
-var corOption = {
-  origin: 'http://localhost:8000',
-}
 
 //middleware
 app.use(cors())
@@ -56,7 +52,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'hello' })
 })
 
+//port
+const PORT = process.env.PORT || 8000
+
 //server
-app.listen(port, () => {
-  console.log(`server is running port ${port} `)
+app.listen(PORT, () => {
+  console.log(`server is running port ${PORT} `)
 })

@@ -1,26 +1,27 @@
-module.exports = (sequelize, DataTypes) => {
-  const Roomtypes = sequelize.define('roomtype', {
-    roomTypeId: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false,
-    },
-    type: {
-      type: DataTypes.STRING,
-    },
-    attributes: {
-      type: DataTypes.JSON,
-    },
-    description: {
-      type: DataTypes.STRING,
-    },
-    beds: {
-      type: DataTypes.INTEGER,
-    },
-    area: {
-      type: DataTypes.FLOAT,
-    },
-  })
-  return Roomtypes
+module.exports=(sequelize,DataTypes)=>{
+    const Roomtypes= sequelize.define("roomtype",{
+        
+        roomTypeId:{
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull:false
+        },
+        type:{
+            type: DataTypes.STRING
+        },
+        attributes:{
+            type: DataTypes.JSON                        
+        },
+        description:{
+            type: DataTypes.STRING
+        },
+        beds:{
+            type: DataTypes.INTEGER
+        },
+        area:{
+            type: DataTypes.FLOAT
+        }
+    })
+    return Roomtypes
 }
