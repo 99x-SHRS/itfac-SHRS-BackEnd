@@ -24,7 +24,7 @@ const registerHotel = async (req, res) => {
 
   await Hotel.create(info)
     .then((hotel) => res.status(200).send(hotel))
-    .catch((err) => console.log(err))
+    .catch((err) => res.status(200).send(err))
 }
 
 //get all hotels

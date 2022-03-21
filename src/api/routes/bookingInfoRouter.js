@@ -1,7 +1,7 @@
-const bookingInfoController= require('../controllers/bookingInfoController.js')
+const bookingInfoController = require('../controllers/bookingInfoController.js')
 
-const router =require('express').Router()
+const router = require('express').Router()
 
-router.post('/createBookingInfo',bookingInfoController.createBookingInfo)
+router.post('/createBookingInfo', bookingInfoController.createBookingInfo)
 
-module.exports=router
+module.exports = router
