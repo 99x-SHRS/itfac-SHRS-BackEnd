@@ -1,4 +1,4 @@
-const dbConfig = require('../../../config/dbConfig.js')
+const dbConfig = require('../../../../config/dbConfig.js')
 
 const { Sequelize, DataTypes } = require('sequelize')
 
@@ -89,6 +89,7 @@ db.hotels.hasMany(db.facilitytypes, {
 })
 db.facilities.belongsTo(db.facilitytypes)
 db.facilitytypes.belongsTo(db.hotels)
+
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS', onDelete: 'cascade' })
 db.hotels.belongsToMany(db.vas, { through: 'Hotel_VAS', onDelete: 'cascade' })
