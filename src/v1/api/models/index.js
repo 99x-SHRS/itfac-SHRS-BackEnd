@@ -1,4 +1,4 @@
-const dbConfig = require('../config/dbConfig.js')
+const dbConfig = require('../../../../config/dbConfig.js')
 
 const { Sequelize, DataTypes } = require('sequelize')
 
@@ -48,6 +48,9 @@ db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.roles = require('./roleModel.js')(sequelize, DataTypes)
 db.saved_room = require('./savedroomModel.js')(sequelize, DataTypes)
+db.roomimages = require('./imageModel.js')(sequelize, DataTypes)
+db.facilities = require('./facilityModel.js')(sequelize, DataTypes)
+db.facilitytypes = require('./facilitytypeModel.js')(sequelize, DataTypes)
 
 //one-one associations
 db.users.hasOne(db.roles, {
@@ -57,6 +60,35 @@ db.users.hasOne(db.roles, {
   },
 })
 db.roles.belongsTo(db.users)
+
+//one-to-many  associations
+db.rooms.hasMany(db.roomimages, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+db.hotels.hasMany(db.facilities, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+
+db.facilitytypes.hasMany(db.facilities, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+db.hotels.hasMany(db.facilitytypes, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+db.facilities.belongsTo(db.facilitytypes)
+db.facilitytypes.belongsTo(db.hotels)
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS', onDelete: 'cascade' })
