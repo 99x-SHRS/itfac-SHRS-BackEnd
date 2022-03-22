@@ -3,10 +3,6 @@ const cors = require('cors')
 const { urlencoded } = require('express')
 const multer = require('multer')
 const app = express()
-require('dotenv').config()
-var corOption = {
-  origin: 'http://localhost:8000',
-}
 
 //middleware
 app.use(cors())
