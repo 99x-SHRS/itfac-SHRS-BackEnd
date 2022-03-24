@@ -1,22 +1,13 @@
 const express = require('express')
 const cors = require('cors')
 const { urlencoded } = require('express')
-const multer = require('multer')
+const upload = require('./src/v1/middleware/multer.js')
 const app = express()
+let port = process.env.PORT || 8000
 
 //middleware
 app.use(cors())
 app.use(express.json())
-
-const fileStorageEngine = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './uploads') //important this is a direct path fron our current file to storage location
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '--' + file.originalname)
-  },
-})
-
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
@@ -50,9 +41,9 @@ const uploadRouter = require('./src/v1/api/routes/uplodsRoutes.js')
 //auth middleware
 const authenticateToken =
   require('./src/v1/auth/authentication.js').authenticateToken
-const upload = multer({ storage: fileStorageEngine })
+
 //auth endpoints
-app.use('/auth/user/', userRouter)
+app.use('/auth/v1/user/', userRouter)
 
 //api
 app.use('/api/v1/user', userRouter)
@@ -75,12 +66,6 @@ app.use('/api/v1/facilitytype', facilitytypeRouter)
 //image uploads apis
 app.use('/api/v1/uploads', upload.single('image'), uploadRouter)
 
-// Single File Route Handler
-// app.use('/api/uploads', upload.single('image'), (req, res) => {
-//   console.log(req.file)
-//   res.send('Single FIle upload success')
-// })
-
 // Multiple Files Route Handler
 // app.post('/multiple', upload.array('images', 3), (req, res) => {
 //   console.log(req.files)
@@ -92,10 +77,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'hello' })
 })
 
-//port
-const PORT = process.env.PORT || 8000
-
 //server
-app.listen(PORT, () => {
-  console.log(`server is running port ${PORT} `)
+app.listen(port, () => {
+  console.log(`server is running port ${port} `)
 })

@@ -1,6 +1,6 @@
 const db = require('../models')
 const Facility = db.facilities
-const Facilitytype = db.facilitytype
+const Facilitytype = db.facilitytypes
 
 // Add facilty
 const createFacility = async (req, res) => {
@@ -30,7 +30,7 @@ const getAllFacilities = async (req, res) => {
 const getAllFacilitiesByHotelId = async (req, res) => {
   let id = req.body.id
   await Facility.findAll({
-    where: { facilityId: id },
+    where: { hotelHotelId: id },
     include: [
       {
         model: Facilitytype,

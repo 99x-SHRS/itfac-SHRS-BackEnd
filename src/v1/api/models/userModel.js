@@ -38,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING,
     },
+    cloudinary_id: {
+      type: DataTypes.STRING,
+    },
   })
   return User
 }

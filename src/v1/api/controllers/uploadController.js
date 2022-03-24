@@ -2,19 +2,29 @@ const db = require('../models')
 const User = db.users
 const RoomImage = db.roomimages
 
+const cloudinary = require('../../middleware/cloudinary.js')
+
 //update profile picture
 const updateProfilePicture = async (req, res) => {
   let id = req.body.id
   let path = req.file.path
-
-  await User.update({ image: path }, { where: { uId: id } })
-    .then((response) => {
-      console.log(response)
-      if (response != 0) {
-        res.status(200).send('Success')
-      } else {
-        res.status(200).send('Failed')
-      }
+  await cloudinary.uploader
+    .upload(path)
+    .then((result) => {
+      User.update(
+        { image: result.secure_url, cloudinary_id: result.public_id },
+        { where: { uId: id } }
+      )
+        .then((response) => {
+          if (response != 0) {
+            res.status(200).send('Success')
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('Error')
+        })
     })
     .catch((err) => {
       res.status(500).send('Error')
@@ -25,17 +35,34 @@ const updateProfilePicture = async (req, res) => {
 const deleteProfilePicture = async (req, res) => {
   let id = req.body.id
   let path = null
-
-  await User.update({ image: path }, { where: { uId: id } })
-    .then((response) => {
-      if (response != 0) {
-        res.status(200).send('Success')
-      } else {
-        res.status(200).send('Failed')
-      }
+  await User.findOne({ where: { uId: id } })
+    .then((user) => {
+      cloudinary.uploader
+        .destroy(user.dataValues.cloudinary_id)
+        .then((response) => {
+          if (response.result == 'ok') {
+            User.update(
+              { image: null, cloudinary_id: null },
+              { where: { uId: id } }
+            )
+              .then(() => {
+                console.log('deleted')
+                res.status(200).send('Success')
+              })
+              .catch((err) => {
+                console.log('deleted')
+                res.status(200).send(err)
+              })
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('nothing to delete')
+        })
     })
     .catch((err) => {
-      res.status(500).send('Error')
+      res.status(500).send('err')
     })
 }
 
