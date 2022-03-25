@@ -8,6 +8,7 @@ let port = process.env.PORT || 8000
 //middleware
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
@@ -16,10 +17,10 @@ app.use(function (req, res, next) {
   )
   next()
 })
-app.use(express.urlencoded({ extended: true }))
+const authenticateToken =
+  require('./src/v1/auth/authentication.js').authenticateToken
 
 //routers
-
 const userRouter = require('./src/v1/api/routes/userRouter.js')
 const messageRouter = require('./src/v1/api/routes/messageRouter.js')
 const hotelRouter = require('./src/v1/api/routes/hotelRouter.js')
@@ -37,10 +38,6 @@ const paymentRouter = require('./src/v1/api/routes/paymentRouter.js')
 const facilityRouter = require('./src/v1/api/routes/facilityRouter')
 const facilitytypeRouter = require('./src/v1/api/routes/facilitytypeRouter.js')
 const uploadRouter = require('./src/v1/api/routes/uplodsRoutes.js')
-
-//auth middleware
-const authenticateToken =
-  require('./src/v1/auth/authentication.js').authenticateToken
 
 //auth endpoints
 app.use('/auth/v1/user/', userRouter)
@@ -62,8 +59,6 @@ app.use('/api/v1/vas', vasRouter)
 app.use('/api/v1/payment', paymentRouter)
 app.use('/api/v1/facility', facilityRouter)
 app.use('/api/v1/facilitytype', facilitytypeRouter)
-
-//image uploads apis
 app.use('/api/v1/uploads', upload.single('image'), uploadRouter)
 
 // Multiple Files Route Handler
