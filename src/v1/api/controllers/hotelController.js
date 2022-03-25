@@ -73,6 +73,25 @@ const getAllHotelsByDistrict = async (req, res) => {
   res.status(200).send(hotel)
 }
 
+//get hotels page by page and status
+const getHotelsByStatus = async (req, res) => {
+  let page = req.body.page
+  let status = req.body.status
+
+  let offset = page * 10
+
+  await Hotel.findAll({
+    where: { status: status },
+    offset: offset,
+    limit: 10,
+  })
+    .then((hotel) => {
+      res.status(200).send(hotel)
+    })
+    .catch((err) => {
+      res.status(400).send(hotel)
+    })
+}
 //  search hotel
 const search = async (req, res) => {
   let location = req.body.location
@@ -229,4 +248,5 @@ module.exports = {
   getAllHotelsByProvince,
   getAllHotelsByDistrict,
   search,
+  getHotelsByStatus,
 }

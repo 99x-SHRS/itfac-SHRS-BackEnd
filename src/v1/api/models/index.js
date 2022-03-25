@@ -47,8 +47,8 @@ db.payments = require('./paymentModel.js')(sequelize, DataTypes)
 db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.roles = require('./roleModel.js')(sequelize, DataTypes)
-db.saved_room = require('./savedroomModel.js')(sequelize, DataTypes)
-db.roomimages = require('./imageModel.js')(sequelize, DataTypes)
+db.savedroom = require('./savedroomModel.js')(sequelize, DataTypes)
+db.roomimages = require('./roomimageModel.js')(sequelize, DataTypes)
 db.facilities = require('./facilityModel.js')(sequelize, DataTypes)
 db.facilitytypes = require('./facilitytypeModel.js')(sequelize, DataTypes)
 
@@ -114,7 +114,7 @@ db.rooms.belongsTo(db.hotels, { onDelete: 'cascade' })
 db.rooms.belongsTo(db.roomtypes, { onDelete: 'cascade' })
 
 db.sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   //db.sequelize.sync({force:false})
   .then(() => {
     console.log('re-synced ...')
