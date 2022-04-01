@@ -83,7 +83,7 @@ const getHotelsByStatus = async (req, res) => {
   await Hotel.findAll({
     where: { status: status },
     offset: offset,
-    limit: 10,
+    limit: 2,
   })
     .then((hotel) => {
       res.status(200).send(hotel)
@@ -94,6 +94,8 @@ const getHotelsByStatus = async (req, res) => {
 }
 //  search hotel
 const search = async (req, res) => {
+  let page = req.body.page
+  let offset = page * 10
   let location = req.body.location
   let adult = req.body.adult
   let children = req.body.children
@@ -101,7 +103,7 @@ const search = async (req, res) => {
   let startDate = new Date(req.body.checkInDate)
   let endDate = new Date(req.body.checkOutDate)
   let keyword = '%' + location + '%'
-
+  console.log('page' + page)
   //calculate persons per room
   let totalPerson = parseInt(adult) + parseFloat(children / 2)
   let personPerRoom = Math.round(totalPerson / reqRooms)
@@ -112,6 +114,7 @@ const search = async (req, res) => {
       [sequelize.fn('sum', sequelize.col('noRooms')), 'total'],
     ],
     group: ['roomRoomId'],
+
     where: {
       [Op.or]: [
         {
@@ -162,8 +165,10 @@ const search = async (req, res) => {
 
       //info gives all the booked rooms and room count
       // get all the rooms
-      Room.findAll({
+      Room.findAndCountAll({
         // attributes:['roomId','availableQty'],
+        offset: offset,
+        limit: 10,
         where: {
           persons: {
             [Op.gte]: personPerRoom,

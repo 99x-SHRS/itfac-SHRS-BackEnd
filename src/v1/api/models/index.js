@@ -114,7 +114,7 @@ db.rooms.belongsTo(db.hotels, { onDelete: 'cascade' })
 db.rooms.belongsTo(db.roomtypes, { onDelete: 'cascade' })
 
 db.sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   //db.sequelize.sync({force:false})
   .then(() => {
     console.log('re-synced ...')
