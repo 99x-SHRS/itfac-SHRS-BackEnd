@@ -34,6 +34,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'pending',
     },
+    userId: {
+      type: DataTypes.INTEGER,
+    },
   })
   return Hotel
 }

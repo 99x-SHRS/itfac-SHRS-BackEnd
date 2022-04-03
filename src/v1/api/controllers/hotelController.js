@@ -19,11 +19,13 @@ const registerHotel = async (req, res) => {
     town: req.body.town,
     Street1: req.body.Street1,
     Street2: req.body.Street2,
+    userUId: req.body.userId,
   }
+  console.log(info)
 
   await Hotel.create(info)
     .then((hotel) => res.status(200).send(hotel))
-    .catch((err) => console.log(err))
+    .catch((err) => res.status(200).send(err))
 }
 
 //get all hotels

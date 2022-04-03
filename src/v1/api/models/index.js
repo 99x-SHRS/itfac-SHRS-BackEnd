@@ -62,6 +62,12 @@ db.users.hasOne(db.roles, {
 db.roles.belongsTo(db.users)
 
 //one-to-many  associations
+db.users.hasMany(db.hotels, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
 db.rooms.hasMany(db.roomimages, {
   onDelete: 'cascade',
   foreignKey: {
@@ -87,8 +93,16 @@ db.hotels.hasMany(db.facilitytypes, {
     allowNull: false,
   },
 })
+db.hotels.hasMany(db.roomtypes, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+db.hotels.belongsTo(db.users)
 db.facilities.belongsTo(db.facilitytypes)
 db.facilitytypes.belongsTo(db.hotels)
+db.roomtypes.belongsTo(db.hotels)
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS', onDelete: 'cascade' })
