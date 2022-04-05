@@ -13,7 +13,8 @@ const createRoom = async (req, res) => {
     roomNo: req.body.roomNo,
     description: req.body.description,
     rate: req.body.rate,
-    availableQty: req.body.availableQty,
+    qty: req.body.qty,
+    availableQty: req.body.qty,
     images: req.body.images,
     persons: req.body.persons,
     hotelHotelId: req.body.hotelId,
@@ -142,20 +143,32 @@ const getAvailbleRooms = async (req, res) => {
     where: {
       [Op.or]: [
         {
-          checkInDate: {
-            [Op.and]: {
-              [Op.gte]: startDate,
-              [Op.lte]: endDate,
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: startDate,
+              },
             },
-          },
+            {
+              checkOutDate: {
+                [Op.gte]: startDate,
+              },
+            },
+          ],
         },
         {
-          checkOutDate: {
-            [Op.and]: {
-              [Op.gte]: startDate,
-              [Op.lte]: endDate,
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: endDate,
+              },
             },
-          },
+            {
+              checkOutDate: {
+                [Op.gte]: endDate,
+              },
+            },
+          ],
         },
       ],
     },
@@ -271,6 +284,73 @@ const getAvailbleRooms = async (req, res) => {
       res.status(500).send(err)
     })
 }
+
+const getAvailableRoomQtyByRoomId = async (req, res) => {
+  let roomId = req.body.roomId
+  let startDate = new Date(req.body.checkInDate)
+  let endDate = new Date(req.body.checkOutDate)
+  await Booking.findOne({
+    attributes: [
+      ['roomRoomId', 'roomId'],
+      [sequelize.fn('sum', sequelize.col('noRooms')), 'total'],
+    ],
+    group: ['roomRoomId'],
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: startDate,
+              },
+            },
+            {
+              checkOutDate: {
+                [Op.gte]: startDate,
+              },
+            },
+          ],
+        },
+        {
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: endDate,
+              },
+            },
+            {
+              checkOutDate: {
+                [Op.gte]: endDate,
+              },
+            },
+          ],
+        },
+      ],
+      roomRoomId: roomId,
+    },
+  })
+    .then((data) => {
+      Room.findOne({
+        attributes: ['qty'],
+        where: { roomId: req.body.roomId },
+      })
+        .then((roomQty) => {
+          let availableQty = roomQty.qty - data.dataValues.total
+          let response = {
+            'to be checkIn': startDate,
+            'to be checkout': endDate,
+            available: availableQty,
+          }
+          res.status(200).send(response)
+        })
+        .catch((err) => {
+          res.status(200).send(err)
+        })
+    })
+    .catch((err) => {
+      res.status(200).send(err)
+    })
+}
 module.exports = {
   createRoom,
   getAllRooms,
@@ -280,4 +360,5 @@ module.exports = {
   getRoomByHotelId,
   getRoomsByHotelIdAndRoomType,
   getAvailbleRooms,
+  getAvailableRoomQtyByRoomId,
 }

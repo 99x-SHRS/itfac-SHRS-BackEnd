@@ -51,6 +51,7 @@ db.savedroom = require('./savedroomModel.js')(sequelize, DataTypes)
 db.roomimages = require('./roomimageModel.js')(sequelize, DataTypes)
 db.facilities = require('./facilityModel.js')(sequelize, DataTypes)
 db.facilitytypes = require('./facilitytypeModel.js')(sequelize, DataTypes)
+db.discounts = require('./discountModel.js')(sequelize, DataTypes)
 
 //one-one associations
 db.users.hasOne(db.roles, {
@@ -99,10 +100,17 @@ db.hotels.hasMany(db.roomtypes, {
     allowNull: false,
   },
 })
+db.hotels.hasMany(db.discounts, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
 db.hotels.belongsTo(db.users)
 db.facilities.belongsTo(db.facilitytypes)
 db.facilitytypes.belongsTo(db.hotels)
 db.roomtypes.belongsTo(db.hotels)
+db.discounts.belongsTo(db.hotels)
 
 //many-many associations
 db.vas.belongsToMany(db.hotels, { through: 'Hotel_VAS', onDelete: 'cascade' })

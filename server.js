@@ -37,6 +37,7 @@ const vasRouter = require('./src/v1/api/routes/vasRouter.js')
 const paymentRouter = require('./src/v1/api/routes/paymentRouter.js')
 const facilityRouter = require('./src/v1/api/routes/facilityRouter')
 const facilitytypeRouter = require('./src/v1/api/routes/facilitytypeRouter.js')
+const discountRouter = require('./src/v1/api/routes/discountRouter.js')
 const uploadRouter = require('./src/v1/api/routes/uplodsRoutes.js')
 
 //auth endpoints
@@ -59,6 +60,7 @@ app.use('/api/v1/vas', vasRouter)
 app.use('/api/v1/payment', paymentRouter)
 app.use('/api/v1/facility', facilityRouter)
 app.use('/api/v1/facilitytype', facilitytypeRouter)
+app.use('/api/v1/discount', discountRouter)
 app.use('/api/v1/uploads', upload.single('image'), uploadRouter)
 
 // Multiple Files Route Handler

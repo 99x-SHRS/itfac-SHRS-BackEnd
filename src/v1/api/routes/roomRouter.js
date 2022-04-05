@@ -14,6 +14,10 @@ router.post(
 router.put('/updateRoomById/:id', roomController.updateRoomById)
 router.delete('/deleteRoomById/:id', roomController.deleteRoomById)
 router.post('/getAvailbleRooms', roomController.getAvailbleRooms)
+router.post(
+  '/getAvailableRoomQtyByRoomId',
+  roomController.getAvailableRoomQtyByRoomId
+)
 
 router.post('/saveRoom', savedroomController.saveRoom)
 router.post('/reserveSavedBooking', savedroomController.reserveSavedBooking)

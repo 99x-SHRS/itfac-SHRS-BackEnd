@@ -5,40 +5,113 @@ const Hotel = db.hotels
 const Room = db.rooms
 const Roominfo = db.roominfo
 
+var Sequelize = require('sequelize')
+var sequelize = require('sequelize')
+const Op = Sequelize.Op
+
 //new booking
 const booking = async (req, res) => {
-  await Room.findOne({
-    attributes: ['hotelHotelId'],
-    where: { roomId: req.body.roomId },
+  let startDate = new Date(req.body.checkInDate)
+  let endDate = new Date(req.body.checkOutDate)
+  let reqRooms = req.body.noRooms
+
+  await Booking.findOne({
+    attributes: [
+      ['roomRoomId', 'roomId'],
+      [sequelize.fn('sum', sequelize.col('noRooms')), 'total'],
+    ],
+    group: ['roomRoomId'],
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: startDate,
+              },
+            },
+            {
+              checkOutDate: {
+                [Op.gte]: startDate,
+              },
+            },
+          ],
+        },
+        {
+          [Op.and]: [
+            {
+              checkInDate: {
+                [Op.lte]: endDate,
+              },
+            },
+            {
+              checkOutDate: {
+                [Op.gte]: endDate,
+              },
+            },
+          ],
+        },
+      ],
+      roomRoomId: req.body.roomId,
+    },
   })
-    .then(async (hotelId) => {
-      let info = {
-        checkInDate: req.body.checkInDate,
-        checkOutDate: req.body.checkOutDate,
-        specialRequest: req.body.specialRequest,
-        arrivalTime: req.body.arrivalTime,
-        guestName: req.body.guestName,
-        rentCar: req.body.rentCar,
-        customerId: req.body.customerId,
-        roomRoomId: req.body.roomId,
-        hotelHotelId: hotelId.hotelHotelId,
-        noRooms: req.body.noRooms,
+    .then((BookingCount) => {
+      let totalRooms = parseInt(reqRooms)
+      if (BookingCount != null) {
+        totalRooms += parseInt(BookingCount.dataValues.total)
       }
 
-      let vasId = req.body.vasId
-      let vasinfo = await VAS.findOne({ where: { vasId: vasId } })
-
-      await Booking.create(info)
-        .then((booking) => {
-          booking
-            .addVas(vasinfo)
-            .then(async (data) => {
-              res.status(200).send(booking)
+      Room.findOne({
+        attributes: ['qty'],
+        where: { roomId: req.body.roomId },
+      })
+        .then((roomQty) => {
+          // console.log(roomQty.qty)
+          // console.log(reqRooms)
+          if (roomQty.qty >= totalRooms) {
+            Room.findOne({
+              attributes: ['hotelHotelId'],
+              where: { roomId: req.body.roomId },
             })
-            .catch((err) => {
-              console.log(err)
-              res.status(500).send(err)
-            })
+              .then(async (hotelId) => {
+                let info = {
+                  checkInDate: req.body.checkInDate,
+                  checkOutDate: req.body.checkOutDate,
+                  specialRequest: req.body.specialRequest,
+                  arrivalTime: req.body.arrivalTime,
+                  guestName: req.body.guestName,
+                  rentCar: req.body.rentCar,
+                  customerId: req.body.customerId,
+                  roomRoomId: req.body.roomId,
+                  hotelHotelId: hotelId.hotelHotelId,
+                  noRooms: req.body.noRooms,
+                }
+                let vasId = req.body.vasId
+                let vasinfo = await VAS.findOne({ where: { vasId: vasId } })
+                await Booking.create(info)
+                  .then((booking) => {
+                    booking
+                      .addVas(vasinfo)
+                      .then(async (data) => {
+                        res.status(200).send(booking)
+                      })
+                      .catch((err) => {
+                        console.log(err)
+                        res.status(500).send(err)
+                      })
+                  })
+                  .catch((err) => {
+                    console.log(err)
+                    res.status(500).send(err)
+                  })
+              })
+              .catch((err) => {
+                res.status(500).send(err)
+              })
+          } else {
+            console.log('unavailable')
+            res.status(200).send('unavailable')
+          }
         })
         .catch((err) => {
           console.log(err)
@@ -46,6 +119,7 @@ const booking = async (req, res) => {
         })
     })
     .catch((err) => {
+      console.log(err)
       res.status(500).send(err)
     })
 }

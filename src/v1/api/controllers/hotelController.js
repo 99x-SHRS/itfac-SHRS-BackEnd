@@ -105,7 +105,7 @@ const search = async (req, res) => {
   let startDate = new Date(req.body.checkInDate)
   let endDate = new Date(req.body.checkOutDate)
   let keyword = '%' + location + '%'
-  console.log('page' + page)
+
   //calculate persons per room
   let totalPerson = parseInt(adult) + parseFloat(children / 2)
   let personPerRoom = Math.round(totalPerson / reqRooms)

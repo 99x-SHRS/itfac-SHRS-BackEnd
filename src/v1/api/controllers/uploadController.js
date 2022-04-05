@@ -1,5 +1,6 @@
 const db = require('../models')
 const User = db.users
+const Hotel = db.hotels
 const RoomImage = db.roomimages
 
 const cloudinary = require('../../middleware/cloudinary.js')
@@ -130,6 +131,67 @@ const deleteRoomImageById = async (req, res) => {
       res.status(500).send('error')
     })
 }
+//add hotel image
+const updateHotelImage = async (req, res) => {
+  let id = req.body.id
+  let path = req.file.path
+  await cloudinary.uploader
+    .upload(path)
+    .then((result) => {
+      Hotel.update(
+        { image: result.secure_url, cloudinary_id: result.public_id },
+        { where: { hotelId: id } }
+      )
+        .then((response) => {
+          if (response != 0) {
+            res.status(200).send('Success')
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('Error')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('Error')
+    })
+}
+
+//delete profile picture
+const deleteHotelImage = async (req, res) => {
+  let id = req.body.id
+  let path = null
+  await Hotel.findOne({ where: { hotelId: id } })
+    .then((hotel) => {
+      cloudinary.uploader
+        .destroy(hotel.dataValues.cloudinary_id)
+        .then((response) => {
+          if (response.result == 'ok') {
+            Hotel.update(
+              { image: null, cloudinary_id: null },
+              { where: { hotelId: id } }
+            )
+              .then(() => {
+                console.log('deleted')
+                res.status(200).send('Success')
+              })
+              .catch((err) => {
+                console.log('deleted')
+                res.status(200).send(err)
+              })
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('nothing to delete')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('err')
+    })
+}
 module.exports = {
   updateProfilePicture,
   deleteProfilePicture,
@@ -137,4 +199,6 @@ module.exports = {
   deleteRoomImageById,
   getAllImages,
   getAllImagesByRoomId,
+  updateHotelImage,
+  deleteHotelImage,
 }

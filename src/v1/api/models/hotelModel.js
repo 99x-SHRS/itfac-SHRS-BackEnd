@@ -34,8 +34,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: 'pending',
     },
-    userId: {
-      type: DataTypes.INTEGER,
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cloudinary_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   })
   return Hotel

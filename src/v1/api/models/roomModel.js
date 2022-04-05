@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     persons: {
       type: DataTypes.INTEGER,
     },
-    availableQty: {
+    qty: {
       type: DataTypes.INTEGER,
       validate: {
         min: 0,
