@@ -73,7 +73,7 @@ const addRoomImage = async (req, res) => {
   const result = await cloudinary.uploader.upload(path)
   let info = {
     roomRoomId: req.body.roomId,
-    path: result.secure_url,
+    image: result.secure_url,
     cloudinary_id: result.public_id,
   }
   await RoomImage.create(info)

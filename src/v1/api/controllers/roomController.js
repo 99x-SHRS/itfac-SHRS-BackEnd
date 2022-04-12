@@ -14,7 +14,6 @@ const createRoom = async (req, res) => {
     description: req.body.description,
     rate: req.body.rate,
     qty: req.body.qty,
-    availableQty: req.body.qty,
     images: req.body.images,
     persons: req.body.persons,
     hotelHotelId: req.body.hotelId,
@@ -205,7 +204,7 @@ const getAvailbleRooms = async (req, res) => {
       //info gives all the booked rooms and room count
       // get all the rooms
       Room.findAndCountAll({
-        // attributes:['roomId','availableQty'],
+        // attributes:['roomId','qty'],
         offset: offset,
         limit: 10,
         where: {
@@ -245,28 +244,28 @@ const getAvailbleRooms = async (req, res) => {
           for (var bookedRoom in info) {
             // console.log(room);
             // console.log(bookedRoom);
-            // console.log(rooms[room].availableQty);
+            // console.log(rooms[room].qty);
             // console.log((parseInt(info[bookedRoom].dataValues.total))+parseInt(reqRooms));
             // console.log("----");
             if (
               room == bookedRoom &&
-              parseInt(rooms[room].availableQty) <=
+              parseInt(rooms[room].qty) <=
                 parseInt(info[bookedRoom].dataValues.total) + parseInt(reqRooms)
             ) {
               // console.log("------------");
               // console.log(room);
               // console.log(bookedRoom);
-              // console.log(rooms[room].availableQty);
+              // console.log(rooms[room].qty);
               // console.log(info[bookedRoom].dataValues.total);
 
               // console.log("------------");
               delete rooms[room]
               console.log('removed from the list')
             } else {
-              // console.log(rooms[room].availableQty);
+              // console.log(rooms[room].qty);
               try {
-                rooms[room].availableQty =
-                  rooms[room].availableQty - info[bookedRoom].dataValues.total
+                rooms[room].qty =
+                  rooms[room].qty - info[bookedRoom].dataValues.total
               } catch (err) {
                 console.log(err)
               }
@@ -335,11 +334,11 @@ const getAvailableRoomQtyByRoomId = async (req, res) => {
         where: { roomId: req.body.roomId },
       })
         .then((roomQty) => {
-          let availableQty = roomQty.qty - data.dataValues.total
+          let qty = roomQty.qty - data.dataValues.total
           let response = {
             'to be checkIn': startDate,
             'to be checkout': endDate,
-            available: availableQty,
+            available: qty,
           }
           res.status(200).send(response)
         })
