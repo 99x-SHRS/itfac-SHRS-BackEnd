@@ -75,6 +75,12 @@ db.rooms.hasMany(db.roomimages, {
     allowNull: false,
   },
 })
+// db.roomtypes.hasMany(db.rooms, {
+//   onDelete: 'cascade',
+//   foreignKey: {
+//     allowNull: false,
+//   },
+// })
 db.hotels.hasMany(db.facilities, {
   onDelete: 'cascade',
   foreignKey: {
