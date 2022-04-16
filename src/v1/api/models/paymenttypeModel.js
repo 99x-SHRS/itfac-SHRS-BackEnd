@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
     },
-    paymentOption: {
-      type: DataTypes.JSON,
-    },
+    // paymentOption: {
+    //   type: DataTypes.JSON,
+    // },
     couponId: {
       type: DataTypes.INTEGER,
       references: { model: 'coupons', key: 'couponId' },

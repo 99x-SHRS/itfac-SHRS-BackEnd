@@ -334,7 +334,13 @@ const getAvailableRoomQtyByRoomId = async (req, res) => {
         where: { roomId: req.body.roomId },
       })
         .then((roomQty) => {
-          let qty = roomQty.qty - data.dataValues.total
+          let qty = 0
+          if (data != null) {
+            qty = roomQty.qty - data.dataValues.total
+          } else {
+            qty = roomQty.qty
+          }
+
           let response = {
             'to be checkIn': startDate,
             'to be checkout': endDate,

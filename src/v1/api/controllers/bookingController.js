@@ -157,7 +157,67 @@ const getBookingById = async (req, res) => {
       res.status(500).send(err)
     })
 }
+//Get booking by user ID
+const getBookingByUserId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 10
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 10,
+    where: { customerId: id },
+  })
+    .then((booking) => res.status(200).send(booking))
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
 
+//Get booking current by user ID
+const getCurrentBookingByUserId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 10
+  let today = new Date()
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 10,
+    where: {
+      customerId: id,
+      checkInDate: {
+        [Op.gte]: today,
+      },
+    },
+  })
+    .then((booking) => res.status(200).send(booking))
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
+//Get booking past by user ID
+const getPastBookingByUserId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 10
+  let today = new Date()
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 10,
+    where: {
+      customerId: id,
+      checkInDate: {
+        [Op.lte]: today,
+      },
+    },
+  })
+    .then((booking) => res.status(200).send(booking))
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
 //  update booking by ID
 const updateBookingById = async (req, res) => {
   let id = req.params.id
@@ -224,4 +284,7 @@ module.exports = {
   updateBookingById,
   deleteBookingByID,
   addVASToBooking,
+  getBookingByUserId,
+  getCurrentBookingByUserId,
+  getPastBookingByUserId,
 }
