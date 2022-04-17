@@ -161,11 +161,16 @@ const getBookingById = async (req, res) => {
 const getBookingByUserId = async (req, res) => {
   let id = req.body.id
   let page = req.body.page
-  let offset = page * 10
+  let offset = page * 5
   await Booking.findAndCountAll({
     offset: offset,
-    limit: 10,
+    limit: 5,
     where: { customerId: id },
+    include: [
+      {
+        model: Hotel,
+      },
+    ],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {
@@ -178,17 +183,23 @@ const getBookingByUserId = async (req, res) => {
 const getCurrentBookingByUserId = async (req, res) => {
   let id = req.body.id
   let page = req.body.page
-  let offset = page * 10
+  let offset = page * 5
+  console.log(offset)
   let today = new Date()
   await Booking.findAndCountAll({
     offset: offset,
-    limit: 10,
+    limit: 5,
     where: {
       customerId: id,
       checkInDate: {
         [Op.gte]: today,
       },
     },
+    include: [
+      {
+        model: Hotel,
+      },
+    ],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {
@@ -200,17 +211,22 @@ const getCurrentBookingByUserId = async (req, res) => {
 const getPastBookingByUserId = async (req, res) => {
   let id = req.body.id
   let page = req.body.page
-  let offset = page * 10
+  let offset = page * 5
   let today = new Date()
   await Booking.findAndCountAll({
     offset: offset,
-    limit: 10,
+    limit: 5,
     where: {
       customerId: id,
       checkInDate: {
         [Op.lte]: today,
       },
     },
+    include: [
+      {
+        model: Hotel,
+      },
+    ],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {

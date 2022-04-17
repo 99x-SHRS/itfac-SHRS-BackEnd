@@ -39,7 +39,7 @@ db.roomtypes = require('./roomtypeModel.js')(sequelize, DataTypes)
 db.bookings = require('./bookingModel.js')(sequelize, DataTypes)
 db.souveniries = require('./souvenirModel.js')(sequelize, DataTypes)
 db.souveniries = require('./souvenirModel.js')(sequelize, DataTypes)
-db.paymenttypes = require('./paymenttypeModel.js')(sequelize, DataTypes)
+// db.paymenttypes = require('./paymenttypeModel.js')(sequelize, DataTypes)
 db.reviews = require('./reviewModel.js')(sequelize, DataTypes)
 db.vas = require('./vasModel.js')(sequelize, DataTypes)
 db.roominfo = require('./roominfoModel.js')(sequelize, DataTypes)
@@ -47,11 +47,12 @@ db.payments = require('./paymentModel.js')(sequelize, DataTypes)
 db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.customergrades = require('./customergradeModel.js')(sequelize, DataTypes)
 db.roles = require('./roleModel.js')(sequelize, DataTypes)
-db.savedroom = require('./savedroomModel.js')(sequelize, DataTypes)
+db.savedhotels = require('./savedhotelModel.js')(sequelize, DataTypes)
 db.roomimages = require('./roomimageModel.js')(sequelize, DataTypes)
 db.facilities = require('./facilityModel.js')(sequelize, DataTypes)
 db.facilitytypes = require('./facilitytypeModel.js')(sequelize, DataTypes)
 db.discounts = require('./discountModel.js')(sequelize, DataTypes)
+db.hotelrules = require('./hotelrules.js')(sequelize, DataTypes)
 
 //one-one associations
 db.users.hasOne(db.roles, {
@@ -70,6 +71,12 @@ db.users.hasMany(db.hotels, {
   },
 })
 db.rooms.hasMany(db.roomimages, {
+  onDelete: 'cascade',
+  foreignKey: {
+    allowNull: false,
+  },
+})
+db.hotels.hasMany(db.hotelrules, {
   onDelete: 'cascade',
   foreignKey: {
     allowNull: false,

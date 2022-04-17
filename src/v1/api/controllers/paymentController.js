@@ -31,7 +31,7 @@ const pay = async (req, res) => {
 
   let info = {
     customerId: data.dataValues.customerid,
-    paymenttypeId: req.body.paymenttypeId,
+    paymenttype: req.body.paymenttype,
     bookingId: req.body.bookingId,
     amount: vasTotal.dataValues.total + roomRate.rate * data.dataValues.noRooms,
     payment: payment,
@@ -114,9 +114,9 @@ const paymentStatusByBookingId = async (req, res) => {
     .then((data) => {
       console.log(data)
       if (data != null) {
-        res.status(200).send('paid')
+        res.status(200).send('Paid')
       } else {
-        res.status(200).send('Not Paid')
+        res.status(200).send('Pending')
       }
     })
     .catch((err) => console.log(err))

@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       references: { model: 'users', key: 'uId' },
     },
-    paymenttypeId: {
-      type: DataTypes.INTEGER,
-      references: { model: 'paymenttypes', key: 'paymenttypeId' },
-      onDelete: 'CASCADE',
-    },
     // paymenttype: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
+    //   type: DataTypes.INTEGER,
+    //   references: { model: 'paymenttypes', key: 'paymenttypeId' },
+    //   onDelete: 'CASCADE',
     // },
+    paymenttype: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     bookingId: {
       type: DataTypes.INTEGER,
       references: { model: 'bookings', key: 'bookingId' },
