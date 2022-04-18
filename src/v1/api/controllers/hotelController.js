@@ -163,6 +163,7 @@ const search = async (req, res) => {
       // get all the rooms
       Room.findAndCountAll({
         // attributes:['roomId','qty'],
+        group: ['hotelHotelId'],
         where: {
           persons: {
             [Op.gte]: personPerRoom,

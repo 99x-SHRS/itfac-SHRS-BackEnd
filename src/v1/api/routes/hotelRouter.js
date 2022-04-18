@@ -21,7 +21,7 @@ router.post(
   savedhotelController.getSavedhotelByCustomerId
 )
 router.delete(
-  '/deleteSavedBookingByID/:hotelId/:customerId',
+  '/deleteSavedHotel/:hotelId/:customerId',
   savedhotelController.deleteSavedBooking
 )
 

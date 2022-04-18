@@ -12,12 +12,14 @@ const saveHotel = async (req, res) => {
   }
   await Savedhotels.create(info)
     .then((data) => {
-      console.log(data)
       res.status(200).send(data)
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).send(err)
+      if ((err.name = 'SequelizeUniqueConstraintError')) {
+        res.status(200).send('saved')
+      } else {
+        res.status(500).send('err')
+      }
     })
 }
 
@@ -56,6 +58,7 @@ const getSavedhotelByCustomerId = async (req, res) => {
 }
 //  Delete saved room by ID
 const deleteSavedBooking = async (req, res) => {
+  console.log('As')
   let hotelId = req.params.hotelId
   let customerId = req.params.customerId
   await Savedhotels.destroy({

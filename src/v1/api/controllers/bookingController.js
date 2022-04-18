@@ -85,6 +85,7 @@ const booking = async (req, res) => {
                   roomRoomId: req.body.roomId,
                   hotelHotelId: hotelId.hotelHotelId,
                   noRooms: req.body.noRooms,
+                  contactNo: req.body.contactNo,
                 }
                 let vasId = req.body.vasId
                 let vasinfo = await VAS.findOne({ where: { vasId: vasId } })
