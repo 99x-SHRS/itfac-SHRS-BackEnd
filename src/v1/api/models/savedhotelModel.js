@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Savedroom = sequelize.define('saved_hotel', {
+  const Savedhotel = sequelize.define('saved_hotel', {
     customerId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       references: { model: 'users', key: 'uId' },
       onDelete: 'CASCADE',
     },
-    roomId: {
+    hotelId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
@@ -15,5 +15,5 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     },
   })
-  return Savedroom
+  return Savedhotel
 }

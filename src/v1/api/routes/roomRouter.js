@@ -1,5 +1,4 @@
 const roomController = require('../controllers/roomController.js')
-const savedroomController = require('../controllers/savedroomController.js')
 
 const router = require('express').Router()
 
@@ -17,17 +16,6 @@ router.post('/getAvailbleRooms', roomController.getAvailbleRooms)
 router.post(
   '/getAvailableRoomQtyByRoomId',
   roomController.getAvailableRoomQtyByRoomId
-)
-
-router.post('/saveRoom', savedroomController.saveRoom)
-router.post('/reserveSavedBooking', savedroomController.reserveSavedBooking)
-router.post(
-  '/getSavedRoomByCustomerId',
-  savedroomController.getSavedRoomByCustomerId
-)
-router.post(
-  '/deleteSavedBookingByID',
-  savedroomController.deleteSavedBookingByID
 )
 
 module.exports = router

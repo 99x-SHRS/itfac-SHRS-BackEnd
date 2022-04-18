@@ -1,4 +1,5 @@
 const hotelController = require('../controllers/hotelController.js')
+const savedhotelController = require('../controllers/savedhotelController.js')
 
 const router = require('express').Router()
 
@@ -12,5 +13,16 @@ router.post('/getAllHotelsByDistrict', hotelController.getAllHotelsByDistrict)
 router.post('/search', hotelController.search)
 //pagination fetch
 router.post('/getHotelsByStatus', hotelController.getHotelsByStatus)
+
+router.post('/saveHotel', savedhotelController.saveHotel)
+router.post('/reserveSavedBooking', savedhotelController.reserveSavedBooking)
+router.post(
+  '/getSavedhotelByCustomerId',
+  savedhotelController.getSavedhotelByCustomerId
+)
+router.delete(
+  '/deleteSavedBookingByID/:hotelId/:customerId',
+  savedhotelController.deleteSavedBooking
+)
 
 module.exports = router
