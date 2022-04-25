@@ -18,9 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     beds: {
       type: DataTypes.INTEGER,
     },
-    area: {
-      type: DataTypes.FLOAT,
-    },
   })
   return Roomtypes
 }

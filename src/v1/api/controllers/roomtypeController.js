@@ -7,7 +7,6 @@ const createRoomtype = async (req, res) => {
     attributes: req.body.attributes,
     description: req.body.description,
     beds: req.body.beds,
-    area: req.body.area,
     hotelHotelId: req.body.hotelId,
   }
   await Roomtypes.create(info)

@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         min: 0,
       },
     },
+    area: {
+      type: DataTypes.FLOAT,
+    },
     // roomTypeId:{
     //     type: DataTypes.INTEGER,
     //     references: { model: 'roomtypes', key: 'roomTypeId' },
