@@ -6,7 +6,7 @@ router.post('/createVAS', vasController.createVAS)
 router.get('/getAllVAS', vasController.getAllVAS)
 router.post('/getVASById', vasController.getVASById)
 router.put('/updateVASById/:id', vasController.updateVASById)
-router.delete('/deleteVASById/:vasId/:bookingId', vasController.deleteVASById)
+router.delete('/deleteVASById/:vasId', vasController.deleteVASById)
 router.delete(
   '/deleteVASByBookingAndVASId/:bookingId/:vasId',
   vasController.deleteVASByBookingAndVASId

@@ -39,6 +39,12 @@ const getHotelById = async (req, res) => {
   let hotel = await Hotel.findAll({ where: { hotelId: id } })
   res.status(200).send(hotel)
 }
+//get a hotel by user id
+const getHotelByUserId = async (req, res) => {
+  let id = req.body.id
+  let hotel = await Hotel.findAll({ where: { userUId: id } })
+  res.status(200).send(hotel)
+}
 
 //update a hotel by id
 const updateHotelById = async (req, res) => {
@@ -251,4 +257,5 @@ module.exports = {
   getAllHotelsByDistrict,
   search,
   getHotelsByStatus,
+  getHotelByUserId,
 }

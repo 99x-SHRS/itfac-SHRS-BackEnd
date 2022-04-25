@@ -85,7 +85,7 @@ const updateVASById = async (req, res) => {
 
 //  Delete VAS by ID
 const deleteVASById = async (req, res) => {
-  let id = req.params.id
+  let id = req.params.vasId
   await VAS.destroy({ where: { vasId: id } })
     .then((data) => {
       console.log(data)

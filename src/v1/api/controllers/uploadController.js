@@ -200,6 +200,7 @@ const addSouvenir = async (req, res) => {
   let info = {
     title: req.body.title,
     subTitle: req.body.subTitle,
+    description: req.body.description,
     hotelId: req.body.hotelId,
     image: result.secure_url,
     cloudinary_id: result.public_id,

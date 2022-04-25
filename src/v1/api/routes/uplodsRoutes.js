@@ -18,4 +18,5 @@ router.post('/hotel/delete', uploadController.deleteHotelImage)
 
 router.post('/hotel/souvenir', uploadController.addSouvenir)
 router.post('/hotel/souvenir/delete/:id', uploadController.deleteSouvenirById)
+
 module.exports = router
