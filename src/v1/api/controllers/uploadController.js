@@ -1,7 +1,8 @@
 const db = require('../models')
 const User = db.users
+const Hotel = db.hotels
 const RoomImage = db.roomimages
-
+const Souvenir = db.souveniries
 const cloudinary = require('../../middleware/cloudinary.js')
 
 //update profile picture
@@ -72,7 +73,7 @@ const addRoomImage = async (req, res) => {
   const result = await cloudinary.uploader.upload(path)
   let info = {
     roomRoomId: req.body.roomId,
-    path: result.secure_url,
+    image: result.secure_url,
     cloudinary_id: result.public_id,
   }
   await RoomImage.create(info)
@@ -130,6 +131,112 @@ const deleteRoomImageById = async (req, res) => {
       res.status(500).send('error')
     })
 }
+//add hotel image
+const updateHotelImage = async (req, res) => {
+  let id = req.body.id
+  let path = req.file.path
+  await cloudinary.uploader
+    .upload(path)
+    .then((result) => {
+      Hotel.update(
+        { image: result.secure_url, cloudinary_id: result.public_id },
+        { where: { hotelId: id } }
+      )
+        .then((response) => {
+          if (response != 0) {
+            res.status(200).send('Success')
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('Error')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('Error')
+    })
+}
+
+//delete profile picture
+const deleteHotelImage = async (req, res) => {
+  let id = req.body.id
+  let path = null
+  await Hotel.findOne({ where: { hotelId: id } })
+    .then((hotel) => {
+      cloudinary.uploader
+        .destroy(hotel.dataValues.cloudinary_id)
+        .then((response) => {
+          if (response.result == 'ok') {
+            Hotel.update(
+              { image: null, cloudinary_id: null },
+              { where: { hotelId: id } }
+            )
+              .then(() => {
+                console.log('deleted')
+                res.status(200).send('Success')
+              })
+              .catch((err) => {
+                console.log('deleted')
+                res.status(200).send(err)
+              })
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('nothing to delete')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('err')
+    })
+}
+
+//add Souvenir images
+const addSouvenir = async (req, res) => {
+  let path = req.file.path
+  const result = await cloudinary.uploader.upload(path)
+  let info = {
+    title: req.body.title,
+    subTitle: req.body.subTitle,
+    description: req.body.description,
+    hotelId: req.body.hotelId,
+    image: result.secure_url,
+    cloudinary_id: result.public_id,
+  }
+  await Souvenir.create(info)
+    .then((image) => res.status(200).send(image))
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
+//delete room image by image id
+const deleteSouvenirById = async (req, res) => {
+  let id = req.params.id
+  console.log(id)
+  await Souvenir.findOne({ where: { souvenirId: id } })
+    .then((souvenir) => {
+      RoomImage.destroy({ where: { souvenirId: id } })
+        .then((data) => {
+          console.log(souvenir)
+          if (data != 0) {
+            cloudinary.uploader.destroy(souvenir.dataValues.cloudinary_id)
+            res.status(200).send('Success')
+          } else {
+            res.status(200).send('Nothing to delete')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          res.status(500).send('error')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('error')
+    })
+}
 module.exports = {
   updateProfilePicture,
   deleteProfilePicture,
@@ -137,4 +244,8 @@ module.exports = {
   deleteRoomImageById,
   getAllImages,
   getAllImagesByRoomId,
+  updateHotelImage,
+  deleteHotelImage,
+  addSouvenir,
+  deleteSouvenirById,
 }

@@ -19,11 +19,12 @@ const registerHotel = async (req, res) => {
     town: req.body.town,
     Street1: req.body.Street1,
     Street2: req.body.Street2,
+    userUId: req.body.userId,
   }
 
   await Hotel.create(info)
     .then((hotel) => res.status(200).send(hotel))
-    .catch((err) => console.log(err))
+    .catch((err) => res.status(500).send(err))
 }
 
 //get all hotels
@@ -36,6 +37,12 @@ const getAllHotels = async (req, res) => {
 const getHotelById = async (req, res) => {
   let id = req.body.id
   let hotel = await Hotel.findAll({ where: { hotelId: id } })
+  res.status(200).send(hotel)
+}
+//get a hotel by user id
+const getHotelByUserId = async (req, res) => {
+  let id = req.body.id
+  let hotel = await Hotel.findAll({ where: { userUId: id } })
   res.status(200).send(hotel)
 }
 
@@ -101,11 +108,11 @@ const search = async (req, res) => {
   let startDate = new Date(req.body.checkInDate)
   let endDate = new Date(req.body.checkOutDate)
   let keyword = '%' + location + '%'
-
+  let page = req.body.page
+  let offset = page * 10
   //calculate persons per room
   let totalPerson = parseInt(adult) + parseFloat(children / 2)
   let personPerRoom = Math.round(totalPerson / reqRooms)
-  // console.log(personPerRoom);
   await Booking.findAll({
     attributes: [
       ['roomRoomId', 'roomId'],
@@ -158,17 +165,18 @@ const search = async (req, res) => {
     ],
   })
     .then((info) => {
-      console.log(info)
-
       //info gives all the booked rooms and room count
       // get all the rooms
-      Room.findAll({
-        // attributes:['roomId','availableQty'],
+      Room.findAndCountAll({
+        // attributes:['roomId','qty'],
+        group: ['hotelHotelId'],
         where: {
           persons: {
             [Op.gte]: personPerRoom,
           },
         },
+        offset: offset,
+        limit: 10,
         include: [
           {
             // attributes:[],
@@ -194,33 +202,33 @@ const search = async (req, res) => {
         ],
       }).then((rooms) => {
         var len = Object.keys(rooms).length
-        console.log(info)
+
         for (var room in rooms) {
           for (var bookedRoom in info) {
             // console.log(room);
             // console.log(bookedRoom);
-            // console.log(rooms[room].availableQty);
+            // console.log(rooms[room].qty);
             // console.log((parseInt(info[bookedRoom].dataValues.total))+parseInt(reqRooms));
             // console.log("----");
             if (
               room == bookedRoom &&
-              parseInt(rooms[room].availableQty) <=
+              parseInt(rooms[room].qty) <=
                 parseInt(info[bookedRoom].dataValues.total) + parseInt(reqRooms)
             ) {
               // console.log("------------");
               // console.log(room);
               // console.log(bookedRoom);
-              // console.log(rooms[room].availableQty);
+              // console.log(rooms[room].qty);
               // console.log(info[bookedRoom].dataValues.total);
 
               // console.log("------------");
               delete rooms[room]
               console.log('removed from the list')
             } else {
-              // console.log(rooms[room].availableQty);
+              // console.log(rooms[room].qty);
               try {
-                rooms[room].availableQty =
-                  rooms[room].availableQty - info[bookedRoom].dataValues.total
+                rooms[room].qty =
+                  rooms[room].qty - info[bookedRoom].dataValues.total
               } catch (err) {
                 console.log(err)
               }
@@ -249,4 +257,5 @@ module.exports = {
   getAllHotelsByDistrict,
   search,
   getHotelsByStatus,
+  getHotelByUserId,
 }

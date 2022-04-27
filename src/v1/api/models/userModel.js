@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     street2: {
       type: DataTypes.STRING,
     },
+    currency: {
+      type: DataTypes.STRING,
+      defaultValue: 'LKR',
+    },
     image: {
       type: DataTypes.STRING,
     },

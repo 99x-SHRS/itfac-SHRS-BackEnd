@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: {
       type: DataTypes.STRING,
     },
+    // email: {
+    //   type: DataTypes.STRING,
+    // },
     description: {
       type: DataTypes.STRING,
     },
@@ -33,6 +36,14 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
       defaultValue: 'pending',
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    cloudinary_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   })
   return Hotel
