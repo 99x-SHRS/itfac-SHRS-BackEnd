@@ -187,7 +187,6 @@ const getCurrentBookingByUserId = async (req, res) => {
   let id = req.body.id
   let page = req.body.page
   let offset = page * 5
-  console.log(offset)
   let today = new Date()
   await Booking.findAndCountAll({
     offset: offset,
@@ -296,7 +295,7 @@ const addVASToBooking = async (req, res) => {
     })
 }
 
-//  get booking by hotel admin id
+//  get all booking by hotel admin id
 const getAllBookigsByHotelAdminId = async (req, res) => {
   let id = req.body.id
   let page = req.body.page
@@ -304,6 +303,68 @@ const getAllBookigsByHotelAdminId = async (req, res) => {
   await Booking.findAndCountAll({
     offset: offset,
     limit: 5,
+    include: [
+      {
+        model: Hotel,
+        where: {
+          userUId: id,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
+//  get all current booking by hotel admin id
+const getCurrentBookigsByHotelAdminId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 5
+  let today = new Date()
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 5,
+    where: {
+      checkInDate: {
+        [Op.gte]: today,
+      },
+    },
+
+    include: [
+      {
+        model: Hotel,
+        where: {
+          userUId: id,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
+//  get all past booking by hotel admin id
+const getPastBookigsByHotelAdminId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 5
+  let today = new Date()
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 5,
+    where: {
+      checkInDate: {
+        [Op.lte]: today,
+      },
+    },
+
     include: [
       {
         model: Hotel,
@@ -331,4 +392,6 @@ module.exports = {
   getCurrentBookingByUserId,
   getPastBookingByUserId,
   getAllBookigsByHotelAdminId,
+  getCurrentBookigsByHotelAdminId,
+  getPastBookigsByHotelAdminId,
 }
