@@ -3,6 +3,8 @@ const Booking = db.bookings
 const VAS = db.vas
 const Hotel = db.hotels
 const Room = db.rooms
+const User = db.users
+const Role = db.roles
 const Roominfo = db.roominfo
 
 var Sequelize = require('sequelize')
@@ -294,6 +296,30 @@ const addVASToBooking = async (req, res) => {
     })
 }
 
+//  get booking by hotel admin id
+const getAllBookigsByHotelAdminId = async (req, res) => {
+  let id = req.body.id
+  let page = req.body.page
+  let offset = page * 5
+  await Booking.findAndCountAll({
+    offset: offset,
+    limit: 5,
+    include: [
+      {
+        model: Hotel,
+        where: {
+          userUId: id,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
 module.exports = {
   booking,
   getAllBookings,
@@ -304,4 +330,5 @@ module.exports = {
   getBookingByUserId,
   getCurrentBookingByUserId,
   getPastBookingByUserId,
+  getAllBookigsByHotelAdminId,
 }
