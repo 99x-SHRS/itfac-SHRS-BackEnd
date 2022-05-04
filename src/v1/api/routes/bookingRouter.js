@@ -16,4 +16,17 @@ router.delete('/deleteBookingByID/:id', bookingController.deleteBookingByID)
 
 router.post('/addVASToBooking', bookingController.addVASToBooking)
 
+//hotel admin
+router.post(
+  '/getAllBookigsByHotelAdminId',
+  bookingController.getAllBookigsByHotelAdminId
+)
+router.post(
+  '/getCurrentBookigsByHotelAdminId',
+  bookingController.getCurrentBookigsByHotelAdminId
+)
+router.post(
+  '/getPastBookigsByHotelAdminId',
+  bookingController.getPastBookigsByHotelAdminId
+)
 module.exports = router
