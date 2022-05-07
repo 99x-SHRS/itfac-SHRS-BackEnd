@@ -150,6 +150,9 @@ const totalAmountByBookingId = async (req, res) => {
       })
   })
 }
+// const monthlyReveueByHotelAdminId=async ()=>{
+// await
+// }
 
 //select customer rank
 const selectGrade = (points) => {

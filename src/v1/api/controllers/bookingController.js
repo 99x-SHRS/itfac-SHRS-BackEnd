@@ -278,12 +278,8 @@ const addVASToBooking = async (req, res) => {
   }
   let vasId = req.body.vasId
   let vasinfo = await VAS.findOne({ where: { vasId: vasId } })
-
   let bookingId = req.body.bookingId
   let bookinginfo = await Booking.findOne({ where: { bookingId: bookingId } })
-
-  // console.log(vasinfo)
-  // console.log(bookinginfo)
   await bookinginfo
     .addVas(vasinfo)
     .then((data) => {
@@ -381,17 +377,25 @@ const getPastBookigsByHotelAdminId = async (req, res) => {
       res.status(403).send(err)
     })
 }
+//get monthly booking count by user id and year
+const monthlyBookingCountByYearAndUser = async (req, res) => {
+  let id = req.body.id
+  let year = req.body.year
+  let nYear = new Date(year)
+  let nextYear = new Date(year)
+  nextYear.setFullYear(nYear.getFullYear() + 1)
+  console.log(nYear)
+  console.log(nextYear)
 
-const sortHotelsByBookingCount = async (req, res) => {
   await Booking.findAll({
-    attributes: [[sequelize.fn('COUNT', sequelize.col('bookingId')), 'total']],
-    group: ['hotelHotelId'],
-    order: [[sequelize.literal('total'), 'DESC']],
-    include: [
-      {
-        model: Hotel,
+    where: {
+      checkInDate: {
+        [Op.and]: {
+          [Op.gte]: nYear,
+          [Op.lte]: nextYear,
+        },
       },
-    ],
+    },
   })
     .then((data) => {
       res.status(200).send(data)
@@ -413,5 +417,5 @@ module.exports = {
   getAllBookigsByHotelAdminId,
   getCurrentBookigsByHotelAdminId,
   getPastBookigsByHotelAdminId,
-  sortHotelsByBookingCount,
+  monthlyBookingCountByYearAndUser,
 }
