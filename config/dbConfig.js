@@ -1,8 +1,8 @@
 // module.exports = {
 //   HOST: 'us-cdbr-east-05.cleardb.net',
-//   USER: 'bc1b18343834bc', //
-//   PASSWORD: '667f4708',
-//   DB: 'heroku_9b1d428a6fc1fae',
+//   USER: 'be414d86f4b1a3', //
+//   PASSWORD: '47904719',
+//   DB: 'heroku_af5bd446dc79593',
 //   dialect: 'mysql',
 //   pool: {
 //     max: 5,
@@ -11,6 +11,7 @@
 //     idle: 10000,
 //   },
 // }
+
 module.exports = {
   HOST: '127.0.0.1',
   USER: 'root', //

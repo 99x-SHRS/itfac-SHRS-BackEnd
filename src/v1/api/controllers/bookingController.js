@@ -381,6 +381,25 @@ const getPastBookigsByHotelAdminId = async (req, res) => {
       res.status(403).send(err)
     })
 }
+
+const sortHotelsByBookingCount = async (req, res) => {
+  await Booking.findAll({
+    attributes: [[sequelize.fn('COUNT', sequelize.col('bookingId')), 'total']],
+    group: ['hotelHotelId'],
+    order: [[sequelize.literal('total'), 'DESC']],
+    include: [
+      {
+        model: Hotel,
+      },
+    ],
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
 module.exports = {
   booking,
   getAllBookings,
@@ -394,4 +413,5 @@ module.exports = {
   getAllBookigsByHotelAdminId,
   getCurrentBookigsByHotelAdminId,
   getPastBookigsByHotelAdminId,
+  sortHotelsByBookingCount,
 }
