@@ -29,4 +29,10 @@ router.post(
   '/getPastBookigsByHotelAdminId',
   bookingController.getPastBookigsByHotelAdminId
 )
+
+router.post(
+  '/monthlyBookingCountByYearAndUser',
+  bookingController.monthlyBookingCountByYearAndUser
+)
+
 module.exports = router

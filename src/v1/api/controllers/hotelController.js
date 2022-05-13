@@ -247,6 +247,28 @@ const search = async (req, res) => {
     })
 }
 
+const sortHotelsByBookingCount = async (req, res) => {
+  const userId = req.body.id
+  await Booking.findAll({
+    attributes: [[sequelize.fn('COUNT', sequelize.col('bookingId')), 'total']],
+    group: ['hotelHotelId'],
+    order: [[sequelize.literal('total'), 'DESC']],
+    include: [
+      {
+        model: Hotel,
+        where: {
+          userUId: userId,
+        },
+      },
+    ],
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
 module.exports = {
   registerHotel,
   getAllHotels,
@@ -258,4 +280,5 @@ module.exports = {
   search,
   getHotelsByStatus,
   getHotelByUserId,
+  sortHotelsByBookingCount,
 }
