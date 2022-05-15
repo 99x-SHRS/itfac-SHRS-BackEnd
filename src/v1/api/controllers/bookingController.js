@@ -384,9 +384,6 @@ const monthlyBookingCountByYearAndUser = async (req, res) => {
   let nYear = new Date(year)
   let nextYear = new Date(year)
   nextYear.setFullYear(nYear.getFullYear() + 1)
-  console.log(nYear)
-  console.log(nextYear)
-
   await Booking.findAll({
     where: {
       checkInDate: {

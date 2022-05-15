@@ -45,6 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     cloudinary_id: {
       type: DataTypes.STRING,
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+    },
   })
   return User
 }

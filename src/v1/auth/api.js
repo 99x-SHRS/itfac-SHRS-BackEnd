@@ -22,13 +22,25 @@ const login = async (req, res) => {
             loggedUser,
             process.env.REFRESH_TOKEN_SECRET
           )
-          res.json({
-            status: 'success',
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-          })
+          await User.update(
+            {
+              refreshToken: refreshToken,
+            },
+            { where: { email: email } }
+          )
+            .then(() => {
+              res.json({
+                status: true,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                userId: user.uId,
+              })
+            })
+            .catch((err) => {
+              res.status(200).send(err)
+            })
         } else {
-          res.status(200).send('incorrect username or password')
+          res.status(200).send({ status: false })
         }
       }
     })
