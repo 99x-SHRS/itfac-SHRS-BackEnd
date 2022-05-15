@@ -34,6 +34,7 @@ const login = async (req, res) => {
                 accessToken: accessToken,
                 refreshToken: refreshToken,
                 userId: user.uId,
+                currency: user.currency,
               })
             })
             .catch((err) => {
@@ -81,13 +82,11 @@ const addUser = async (req, res) => {
           res.status(200).send(user)
         })
         .catch((err) => {
-          console.log(err)
           res.status(500).send(err)
         })
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).send(err)
+      res.status(200).send(false)
     })
 }
 

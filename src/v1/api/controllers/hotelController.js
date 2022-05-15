@@ -256,9 +256,6 @@ const sortHotelsByBookingCount = async (req, res) => {
     include: [
       {
         model: Hotel,
-        where: {
-          userUId: userId,
-        },
       },
     ],
   })

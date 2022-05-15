@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
     refreshToken: {
       type: DataTypes.STRING,
     },
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   })
   return User
 }
