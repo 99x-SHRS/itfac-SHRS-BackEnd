@@ -5,6 +5,7 @@ const genarateAccessToken = require('./authentication.js').genarateAccessToken
 
 const User = db.users
 const Role = db.roles
+const Customergrade = db.customergrades
 
 const login = async (req, res) => {
   let email = req.body.email
@@ -69,16 +70,25 @@ const addUser = async (req, res) => {
     street2: req.body.street2,
     image: req.body.image,
   }
-  let roleInfo = {
-    admin: 0,
-    hotelAdmin: 0,
-    customer: 1,
-  }
+
   await User.create(info)
     .then((user) => {
+      let roleInfo = {
+        admin: 0,
+        hotelAdmin: 0,
+        customer: user.uId,
+      }
       user
         .createRole(roleInfo)
         .then((data) => {
+          let info = {
+            points: 0,
+            rank: 'Club Vision Red',
+            customerId: user.uId,
+          }
+          Customergrade.create(info).then((data) => {
+            console.log(data)
+          })
           res.status(200).send(user)
         })
         .catch((err) => {
