@@ -21,20 +21,23 @@ const findDiscount = (amount, points) => {
     return amount * 0.05
   } else if (points < 2000) {
     return amount * 0.07
-  } else if (points < 3000) {
-    return amount * 0.08
   } else if (points < 4000) {
     return amount * 0.09
-  } else if (points < 5000) {
-    return amount * 0.1
   } else {
     return amount * 0.15
   }
 }
-//Get coupon by coupon ID
-const getCouponByCouponId = async (req, res) => {
-  let id = req.body.couponId
-  let coupon = await Coupon.findAll({ where: { couponId: id } })
-  res.status(200).send(coupon)
+//Get getCustomerGrade
+const getCustomerGrade = async (req, res) => {
+  let id = req.body.id
+  await CustomerGrade.findOne({
+    where: { customerId: id },
+  })
+    .then((usergrade) => {
+      res.status(200).send(usergrade)
+    })
+    .catch((err) => {
+      res.status(500).send(err)
+    })
 }
-module.exports = { getCustomerDiscount }
+module.exports = { getCustomerDiscount, getCustomerGrade }

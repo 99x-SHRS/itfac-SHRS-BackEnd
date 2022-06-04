@@ -150,9 +150,6 @@ const totalAmountByBookingId = async (req, res) => {
       })
   })
 }
-// const monthlyReveueByHotelAdminId=async ()=>{
-// await
-// }
 
 //select customer rank
 const selectGrade = (points) => {
@@ -160,11 +157,7 @@ const selectGrade = (points) => {
     return 'Club Vision Red'
   } else if (points < 2000) {
     return 'Bronze'
-  } else if (points < 3000) {
-    return 'Brone'
   } else if (points < 4000) {
-    return 'Silver'
-  } else if (points < 5000) {
     return 'Gold'
   } else {
     return 'Platinum'

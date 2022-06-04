@@ -384,9 +384,6 @@ const monthlyBookingCountByYearAndUser = async (req, res) => {
   let nYear = new Date(year)
   let nextYear = new Date(year)
   nextYear.setFullYear(nYear.getFullYear() + 1)
-  console.log(nYear)
-  console.log(nextYear)
-
   await Booking.findAll({
     where: {
       checkInDate: {
@@ -396,6 +393,33 @@ const monthlyBookingCountByYearAndUser = async (req, res) => {
         },
       },
     },
+  })
+    .then((data) => {
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      res.status(403).send(err)
+    })
+}
+const getBookingCountByHotelAdminUserId = async (req, res) => {
+  let id = req.body.id
+  await Booking.findAll({
+    attributes: [
+      [sequelize.fn('count', sequelize.col('hotelHotelId')), 'count'],
+    ],
+    group: ['hotelHotelId'],
+    include: [
+      {
+        attributes: [
+          ['hotelId', 'hotelId'],
+          ['name', 'hotelName'],
+        ],
+        model: Hotel,
+        where: {
+          userUId: id,
+        },
+      },
+    ],
   })
     .then((data) => {
       res.status(200).send(data)
@@ -418,4 +442,5 @@ module.exports = {
   getCurrentBookigsByHotelAdminId,
   getPastBookigsByHotelAdminId,
   monthlyBookingCountByYearAndUser,
+  getBookingCountByHotelAdminUserId,
 }

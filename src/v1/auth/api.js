@@ -5,6 +5,7 @@ const genarateAccessToken = require('./authentication.js').genarateAccessToken
 
 const User = db.users
 const Role = db.roles
+const Customergrade = db.customergrades
 
 const login = async (req, res) => {
   let email = req.body.email
@@ -22,13 +23,26 @@ const login = async (req, res) => {
             loggedUser,
             process.env.REFRESH_TOKEN_SECRET
           )
-          res.json({
-            status: 'success',
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-          })
+          await User.update(
+            {
+              refreshToken: refreshToken,
+            },
+            { where: { email: email } }
+          )
+            .then(() => {
+              res.json({
+                status: true,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                userId: user.uId,
+                currency: user.currency,
+              })
+            })
+            .catch((err) => {
+              res.status(200).send(err)
+            })
         } else {
-          res.status(200).send('incorrect username or password')
+          res.status(200).send({ status: false })
         }
       }
     })
@@ -56,26 +70,33 @@ const addUser = async (req, res) => {
     street2: req.body.street2,
     image: req.body.image,
   }
-  let roleInfo = {
-    admin: 0,
-    hotelAdmin: 0,
-    customer: 1,
-  }
+
   await User.create(info)
     .then((user) => {
+      let roleInfo = {
+        admin: 0,
+        hotelAdmin: 0,
+        customer: user.uId,
+      }
       user
         .createRole(roleInfo)
         .then((data) => {
+          let info = {
+            points: 0,
+            rank: 'Club Vision Red',
+            customerId: user.uId,
+          }
+          Customergrade.create(info).then((data) => {
+            console.log(data)
+          })
           res.status(200).send(user)
         })
         .catch((err) => {
-          console.log(err)
           res.status(500).send(err)
         })
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).send(err)
+      res.status(200).send(false)
     })
 }
 

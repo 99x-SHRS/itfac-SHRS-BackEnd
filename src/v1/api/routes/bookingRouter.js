@@ -34,5 +34,9 @@ router.post(
   '/monthlyBookingCountByYearAndUser',
   bookingController.monthlyBookingCountByYearAndUser
 )
+router.post(
+  '/getBookingCountByHotelAdminUserId',
+  bookingController.getBookingCountByHotelAdminUserId
+)
 
 module.exports = router

@@ -45,6 +45,13 @@ module.exports = (sequelize, DataTypes) => {
     cloudinary_id: {
       type: DataTypes.STRING,
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   })
   return User
 }
