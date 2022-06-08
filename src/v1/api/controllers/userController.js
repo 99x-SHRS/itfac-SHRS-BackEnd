@@ -1,5 +1,5 @@
 const db = require('../models')
-const bcrpt = require('bcrypt')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const User = db.users
@@ -55,9 +55,51 @@ const deleteUserById = async (req, res) => {
     })
 }
 
+const changePassword = async (req, res) => {
+  let email = req.body.email
+  let oldPassword = req.body.oldPassword
+  let newPassword = req.body.newPassword
+
+  const salt = await bcrypt.genSalt()
+  const hashedPassword = await bcrypt.hash(newPassword, salt)
+  let changedPassword = {
+    password: hashedPassword,
+  }
+  await User.findOne({ where: { email: email } })
+    .then(async (user) => {
+      if (user == null) {
+        res
+          .status(200)
+          .send({ status: false, description: 'email is not existing' })
+      } else {
+        if (await bcrypt.compare(oldPassword, user.password)) {
+          User.update(changedPassword, { where: { email: email } })
+            .then((data) => {
+              res.status(200).send({
+                status: true,
+                description: 'Password was change',
+              })
+            })
+            .catch((err) => {
+              console.log(err)
+              res.status(500).send(err)
+            })
+        } else {
+          res
+            .status(200)
+            .send({ status: false, description: 'old password is incorrect' })
+        }
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
 module.exports = {
   getAllUser,
   getUserById,
   updateUserById,
   deleteUserById,
+  changePassword,
 }
