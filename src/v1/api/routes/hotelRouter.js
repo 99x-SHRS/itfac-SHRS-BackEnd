@@ -12,6 +12,7 @@ router.delete('/deleteHotelById/:id', hotelController.deleteHotelById)
 router.post('/getAllHotelsByProvince', hotelController.getAllHotelsByProvince)
 router.post('/getAllHotelsByDistrict', hotelController.getAllHotelsByDistrict)
 router.post('/search', hotelController.search)
+router.post('/searchSotByRate', hotelController.searchSotByRate)
 //pagination fetch
 router.post('/getHotelsByStatus', hotelController.getHotelsByStatus)
 

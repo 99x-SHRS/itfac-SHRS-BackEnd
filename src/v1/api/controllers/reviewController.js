@@ -92,8 +92,9 @@ const getReviewByHotelId = async (req, res) => {
 //Get review by  cunstomer ID
 const getReviewByCustomerId = async (req, res) => {
   let id = req.body.id
+  let page = req.body.page
   let offset = page * 3
-  await Review.findAll({
+  await Review.findAndCountAll({
     offset: offset,
     limit: 3,
     where: { customerId: id },
