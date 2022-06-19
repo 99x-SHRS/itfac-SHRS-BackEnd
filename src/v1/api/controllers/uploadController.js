@@ -32,6 +32,67 @@ const updateProfilePicture = async (req, res) => {
     })
 }
 
+//update hotel plan image
+const addHotelPlan = async (req, res) => {
+  let id = req.body.id
+  let path = req.file.path
+  await cloudinary.uploader
+    .upload(path)
+    .then((result) => {
+      Hotel.update(
+        { plan_image: result.secure_url, plan_cloudinary_id: result.public_id },
+        { where: { hotelId: id } }
+      )
+        .then((response) => {
+          if (response != 0) {
+            res.status(200).send('Success')
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('Error')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('Error')
+    })
+}
+//delete hotel plan  image
+const deleteHotelPlanImage = async (req, res) => {
+  let id = req.body.id
+  let path = null
+  await Hotel.findOne({ where: { hotelId: id } })
+    .then((hotel) => {
+      cloudinary.uploader
+        .destroy(hotel.dataValues.plan_cloudinary_id)
+        .then((response) => {
+          if (response.result == 'ok') {
+            Hotel.update(
+              { plan_image: null, plan_cloudinary_id: null },
+              { where: { hotelId: id } }
+            )
+              .then(() => {
+                console.log('deleted')
+                res.status(200).send('Success')
+              })
+              .catch((err) => {
+                console.log('deleted')
+                res.status(200).send(err)
+              })
+          } else {
+            res.status(200).send('Failed')
+          }
+        })
+        .catch((err) => {
+          res.status(500).send('nothing to delete')
+        })
+    })
+    .catch((err) => {
+      res.status(500).send('err')
+    })
+}
+
 //delete profile picture
 const deleteProfilePicture = async (req, res) => {
   let id = req.body.id
@@ -248,4 +309,6 @@ module.exports = {
   deleteHotelImage,
   addSouvenir,
   deleteSouvenirById,
+  addHotelPlan,
+  deleteHotelPlanImage,
 }

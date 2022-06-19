@@ -1,11 +1,13 @@
 const db = require('../models')
 const Review = db.reviews
+const Hotel = db.hotels
 
 const createReview = async (req, res) => {
   let info = {
     review: req.body.review,
-    hotelId: req.body.hotelId,
-    customerId: req.body.customerId,
+    stars: req.body.stars,
+    hotelHotelId: req.body.hotelId,
+    userUId: req.body.customerId,
   }
 
   await Review.create(info)
@@ -78,7 +80,17 @@ const deleteReviewById = async (req, res) => {
 const getReviewByHotelId = async (req, res) => {
   let id = req.body.id
   console.log(id)
-  await Review.findAll({ where: { hotelId: id } })
+  await Review.findAll({
+    where: { hotelHotelId: id },
+    // include: [
+    //   {
+    //     model: Hotel,
+    //     where: {
+    //       userUId: id,
+    //     },
+    //   },
+    // ],
+  })
     .then((data) => {
       console.log(data)
       res.status(200).send(data)
@@ -97,7 +109,7 @@ const getReviewByCustomerId = async (req, res) => {
   await Review.findAndCountAll({
     offset: offset,
     limit: 3,
-    where: { customerId: id },
+    where: { userUId: id },
   })
     .then((data) => {
       console.log(data)
@@ -113,7 +125,9 @@ const getReviewByCustomerId = async (req, res) => {
 const getReviewByCustomerIdAndHotelId = async (req, res) => {
   let hotelId = req.body.hotelId
   let customerId = req.body.customerId
-  await Review.findAll({ where: { customerId: customerId, hotelId: hotelId } })
+  await Review.findAll({
+    where: { userUId: customerId, hotelHotelId: hotelId },
+  })
     .then((data) => {
       console.log(data)
       res.status(200).send(data)

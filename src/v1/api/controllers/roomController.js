@@ -10,7 +10,6 @@ const Roomtypes = db.roomtypes
 
 const createRoom = async (req, res) => {
   let info = {
-    roomNo: req.body.roomNo,
     description: req.body.description,
     rate: req.body.rate,
     qty: req.body.qty,

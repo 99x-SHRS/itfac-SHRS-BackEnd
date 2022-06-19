@@ -14,6 +14,7 @@ const registerHotel = async (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     description: req.body.description,
+    email: req.body.emaildistrict,
     province: req.body.province,
     district: req.body.district,
     town: req.body.town,

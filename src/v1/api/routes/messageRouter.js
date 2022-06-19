@@ -18,6 +18,6 @@ router.post(
   '/getMessagesByRecieverIdAndDate',
   userController.getMessagesByRecieverIdAndDate
 )
-router.put('/markAsRead', userController.markAsRead)
+router.post('/markAsRead', userController.markAsRead)
 
 module.exports = router

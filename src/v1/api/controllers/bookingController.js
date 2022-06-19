@@ -62,15 +62,12 @@ const booking = async (req, res) => {
       if (BookingCount != null) {
         totalRooms += parseInt(BookingCount.dataValues.total)
       }
-
       Room.findOne({
         attributes: ['qty'],
         where: { roomId: req.body.roomId },
       })
         .then((roomQty) => {
-          // console.log(roomQty.qty)
-          // console.log(reqRooms)
-          if (roomQty.qty >= totalRooms) {
+          if (roomQty != null && roomQty.qty >= totalRooms) {
             Room.findOne({
               attributes: ['hotelHotelId'],
               where: { roomId: req.body.roomId },
@@ -135,6 +132,8 @@ const getAllBookings = async (req, res) => {
         model: VAS,
       },
     ],
+
+    order: [['bookingId', 'DESC']],
   })
     .then((bookings) => res.status(200).send(bookings))
     .catch((err) => {
@@ -174,6 +173,7 @@ const getBookingByUserId = async (req, res) => {
         model: Hotel,
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {
@@ -202,6 +202,7 @@ const getCurrentBookingByUserId = async (req, res) => {
         model: Hotel,
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {
@@ -229,6 +230,7 @@ const getPastBookingByUserId = async (req, res) => {
         model: Hotel,
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((booking) => res.status(200).send(booking))
     .catch((err) => {
@@ -307,6 +309,7 @@ const getAllBookigsByHotelAdminId = async (req, res) => {
         },
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((data) => {
       res.status(200).send(data)
@@ -338,6 +341,7 @@ const getCurrentBookigsByHotelAdminId = async (req, res) => {
         },
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((data) => {
       res.status(200).send(data)
@@ -369,6 +373,7 @@ const getPastBookigsByHotelAdminId = async (req, res) => {
         },
       },
     ],
+    order: [['bookingId', 'DESC']],
   })
     .then((data) => {
       res.status(200).send(data)
