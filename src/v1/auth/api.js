@@ -11,8 +11,17 @@ const login = async (req, res) => {
   let email = req.body.email
   let password = req.body.password
 
-  await User.findOne({ where: { email: email } })
+  await User.findOne({
+    where: { email: email },
+    include: [
+      {
+        model: Role,
+      },
+    ],
+  })
     .then(async (user) => {
+      console.log(user)
+
       if (user == null) {
         res.status(200).send('Cannot find user')
       } else {
@@ -36,6 +45,9 @@ const login = async (req, res) => {
                 refreshToken: refreshToken,
                 userId: user.uId,
                 currency: user.currency,
+                admin: user.role.admin,
+                hotelAdmin: user.role.hotelAdmin,
+                customer: user.role.customer,
               })
             })
             .catch((err) => {

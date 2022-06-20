@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: {
       type: DataTypes.STRING,
     },
-    // email: {
-    //   type: DataTypes.STRING,
-    // },
+    email: {
+      type: DataTypes.STRING,
+    },
     description: {
       type: DataTypes.STRING,
     },
@@ -42,6 +42,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     cloudinary_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    plan_image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    plan_cloudinary_id: {
       type: DataTypes.STRING,
       allowNull: true,
     },

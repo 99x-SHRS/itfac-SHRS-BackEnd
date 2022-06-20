@@ -14,6 +14,7 @@ const registerHotel = async (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     description: req.body.description,
+    email: req.body.emaildistrict,
     province: req.body.province,
     district: req.body.district,
     town: req.body.town,
@@ -247,6 +248,168 @@ const search = async (req, res) => {
     })
 }
 
+//  search hotel by rate
+const searchSotByRate = async (req, res) => {
+  let location = req.body.location
+  let adult = req.body.adult
+  let children = req.body.children
+  let reqRooms = req.body.rooms
+  let lowerPrice = req.body.lowerPrice
+  let upperPrice = req.body.upperPrice
+  let startDate = new Date(req.body.checkInDate)
+  let endDate = new Date(req.body.checkOutDate)
+  let keyword = '%' + location + '%'
+  let page = req.body.page
+  let offset = page * 10
+  //calculate persons per room
+  let totalPerson = parseInt(adult) + parseFloat(children / 2)
+  let personPerRoom = Math.round(totalPerson / reqRooms)
+  await Booking.findAll({
+    attributes: [
+      ['roomRoomId', 'roomId'],
+      [sequelize.fn('sum', sequelize.col('noRooms')), 'total'],
+    ],
+    group: ['roomRoomId'],
+    where: {
+      [Op.or]: [
+        {
+          checkInDate: {
+            [Op.and]: {
+              [Op.gte]: startDate,
+              [Op.lte]: endDate,
+            },
+          },
+        },
+        {
+          checkOutDate: {
+            [Op.and]: {
+              [Op.gte]: startDate,
+              [Op.lte]: endDate,
+            },
+          },
+        },
+      ],
+    },
+
+    include: [
+      {
+        attributes: [],
+        model: Hotel,
+        as: 'hotel',
+        where: {
+          [Op.or]: [
+            { name: { [Op.like]: keyword } },
+            { district: { [Op.like]: keyword } },
+            { district: { [Op.like]: keyword } },
+            { province: { [Op.like]: keyword } },
+            { town: { [Op.like]: keyword } },
+            { Street1: { [Op.like]: keyword } },
+            { Street2: { [Op.like]: keyword } },
+          ],
+        },
+      },
+      {
+        attributes: [],
+        model: Room,
+        as: 'room',
+      },
+    ],
+  })
+    .then((info) => {
+      //info gives all the booked rooms and room count
+      // get all the rooms
+      Room.findAndCountAll({
+        // attributes:['roomId','qty'],
+        group: ['hotelHotelId'],
+        where: {
+          [Op.and]: [
+            {
+              persons: {
+                [Op.gte]: personPerRoom,
+              },
+            },
+            {
+              rate: {
+                [Op.and]: {
+                  [Op.gte]: lowerPrice,
+                  [Op.lte]: upperPrice,
+                },
+              },
+            },
+          ],
+        },
+        offset: offset,
+        limit: 10,
+        include: [
+          {
+            // attributes:[],
+            model: Hotel,
+            as: 'hotel',
+            where: {
+              [Op.or]: [
+                { name: { [Op.like]: keyword } },
+                { district: { [Op.like]: keyword } },
+                { district: { [Op.like]: keyword } },
+                { province: { [Op.like]: keyword } },
+                { town: { [Op.like]: keyword } },
+                { Street1: { [Op.like]: keyword } },
+                { Street2: { [Op.like]: keyword } },
+              ],
+            },
+          },
+          {
+            // attributes:[],
+            model: Roomtypes,
+            as: 'roomtype',
+          },
+        ],
+      }).then((rooms) => {
+        var len = Object.keys(rooms).length
+
+        for (var room in rooms) {
+          for (var bookedRoom in info) {
+            // console.log(room);
+            // console.log(bookedRoom);
+            // console.log(rooms[room].qty);
+            // console.log((parseInt(info[bookedRoom].dataValues.total))+parseInt(reqRooms));
+            // console.log("----");
+            if (
+              room == bookedRoom &&
+              parseInt(rooms[room].qty) <=
+                parseInt(info[bookedRoom].dataValues.total) + parseInt(reqRooms)
+            ) {
+              // console.log("------------");
+              // console.log(room);
+              // console.log(bookedRoom);
+              // console.log(rooms[room].qty);
+              // console.log(info[bookedRoom].dataValues.total);
+
+              // console.log("------------");
+              delete rooms[room]
+              console.log('removed from the list')
+            } else {
+              // console.log(rooms[room].qty);
+              try {
+                rooms[room].qty =
+                  rooms[room].qty - info[bookedRoom].dataValues.total
+              } catch (err) {
+                console.log(err)
+              }
+            }
+          }
+          //  console.log(info);
+        }
+        res.send(rooms)
+      })
+
+      // res.status(200).send(info)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
+
 const sortHotelsByBookingCount = async (req, res) => {
   const userId = req.body.id
   await Booking.findAll({
@@ -278,4 +441,5 @@ module.exports = {
   getHotelsByStatus,
   getHotelByUserId,
   sortHotelsByBookingCount,
+  searchSotByRate,
 }

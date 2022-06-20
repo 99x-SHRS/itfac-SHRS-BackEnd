@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
     arrivalTime: {
       type: DataTypes.DATE,
     },
+    email: {
+      type: DataTypes.STRING,
+    },
     guestName: {
       type: DataTypes.STRING,
     },

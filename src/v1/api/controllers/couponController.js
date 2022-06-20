@@ -34,6 +34,19 @@ const getAllCoupons = async (req, res) => {
       res.status(500).send(err)
     })
 }
+// Get all coupons
+const getAllCouponByHotelId = async (req, res) => {
+  let hotelId = req.body.hotelId
+  await Coupon.findAll({ where: { hotelId: hotelId } })
+    .then((data) => {
+      console.log(data)
+      res.status(200).send(data)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+}
 
 //Get coupon by coupon ID
 const getCouponByCouponId = async (req, res) => {
@@ -85,4 +98,5 @@ module.exports = {
   getCouponByCouponId,
   validateCoupon,
   deleteCouponById,
+  getAllCouponByHotelId,
 }

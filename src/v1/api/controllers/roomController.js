@@ -10,7 +10,6 @@ const Roomtypes = db.roomtypes
 
 const createRoom = async (req, res) => {
   let info = {
-    roomNo: req.body.roomNo,
     description: req.body.description,
     rate: req.body.rate,
     qty: req.body.qty,
@@ -46,7 +45,14 @@ const getAllRooms = async (req, res) => {
 const getRoomById = async (req, res) => {
   let id = req.body.id
   console.log(id)
-  await Room.findAll({ where: { roomId: id } })
+  await Room.findOne({
+    where: { roomId: id },
+    include: [
+      {
+        model: Roomtypes,
+      },
+    ],
+  })
     .then((data) => {
       console.log(data)
       res.status(200).send(data)
